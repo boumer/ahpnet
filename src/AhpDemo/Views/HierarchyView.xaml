@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="AhpDemo.Views.HierarchyView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ContextMenu x:Key="HierarchyViewContextMenu">
+                <MenuItem Header="Add Alternative" Command="{Binding AddAlternative}" CommandParameter="{Binding}" />
+                <MenuItem Header="Add Criterion" Command="{Binding AddCriterion}" CommandParameter="{Binding}"/>
+                <MenuItem Header="Remove" Command="{Binding RemoveNode}" CommandParameter="{Binding}"/>
+            </ContextMenu>
+            <HierarchicalDataTemplate x:Key="HierarchyViewTemplate" ItemsSource="{Binding Children}">
+                <StackPanel Orientation="Horizontal" Margin="2" ContextMenu="{DynamicResource HierarchyViewContextMenu}">
+                    <Image Source="{Binding ImageUrl}" Width="18" Height="18" SnapsToDevicePixels="True" Stretch="UniformToFill"/>
+                    <TextBlock Text="{Binding Name}" Width="Auto" Height="Auto" VerticalAlignment="Center" />
+                </StackPanel>
+            </HierarchicalDataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <TreeView Name="treeView" 
+              ItemsSource="{Binding Path=Tree.Nodes}" 
+              ItemTemplate="{StaticResource HierarchyViewTemplate}" 
+              BorderThickness="0">
+        <TreeView.ItemContainerStyle>
+            <Style TargetType="{x:Type TreeViewItem}">
+                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                <Setter Property="IsExpanded" Value="True" />
+                <EventSetter Event="MouseRightButtonDown" Handler="TreeItem_RightClick" />
+            </Style>
+        </TreeView.ItemContainerStyle>
+    </TreeView>
+
+</UserControl>
