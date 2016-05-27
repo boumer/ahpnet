@@ -15,13 +15,12 @@ namespace Ahp.Tests
         public void PairwiseComparison_Constructor_NullCriterions_ThrowsArgumentNullException()
         {
             //Arrange
-            List<CriterionNode> criterions = null;
             Exception exception = null;
 
             //Act
             try
             {
-                var comparison = new PairwiseComparison(criterions);
+                var comparison = new PairwiseComparison((List<CriterionNode>)null);
             }
             catch (Exception e)
             {
@@ -91,13 +90,12 @@ namespace Ahp.Tests
         public void PairwiseComparison_Constructor_NullAlternatives_ThrowsArgumentNullException()
         {
             //Arrange
-            List<AlternativeNode> alternatives = null;
             Exception exception = null;
 
             //Act
             try
             {
-                var comparison = new PairwiseComparison(alternatives);
+                var comparison = new PairwiseComparison((List<AlternativeNode>)null);
             }
             catch (Exception e)
             {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ahp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,13 @@ namespace AhpDemo.ViewModels
 {
     public class AlternativeNodeViewModel : HierarchyNodeViewModel
     {
-        public AlternativeNodeViewModel(HierarchyViewModel hierarchy)
+        public Alternative Alternative { get; private set; }
+
+        public AlternativeNodeViewModel(HierarchyViewModel hierarchy, Alternative alternative)
             : base(hierarchy)
         {
-            Name = "Alternative";
+            Alternative = alternative;
+            Name = alternative.Name;
         }
     }
 }

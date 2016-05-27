@@ -18,27 +18,27 @@ namespace Ahp.Tests
             //http://en.wikipedia.org/wiki/Analytic_Hierarchy_Process
 
             //Arrange
-            Hierarchy hierarchy = new Hierarchy("Choose optimal car");
+            var hierarchy = new Hierarchy("Choose optimal car");
 
-            CriterionNode costCriterion = hierarchy.GoalNode.CriterionNodes.Add("Cost", 0.504M);
-            CriterionNode safetyCriterion = hierarchy.GoalNode.CriterionNodes.Add("Safety", 0.237M);
-            CriterionNode styleCriterion = hierarchy.GoalNode.CriterionNodes.Add("Style", 0.042M);
-            CriterionNode capacityNode = hierarchy.GoalNode.CriterionNodes.Add("Capacity", 0.217M);
+            var costCriterion = hierarchy.GoalNode.CriterionNodes.Add("Cost", 0.504M);
+            var safetyCriterion = hierarchy.GoalNode.CriterionNodes.Add("Safety", 0.237M);
+            var styleCriterion = hierarchy.GoalNode.CriterionNodes.Add("Style", 0.042M);
+            var capacityNode = hierarchy.GoalNode.CriterionNodes.Add("Capacity", 0.217M);
+            
+            var purchasePriceCriterion = costCriterion.SubcriterionNodes.Add("Purchase price", 0.488M);
+            var fuelCostsCriterion = costCriterion.SubcriterionNodes.Add("Fuel costs", 0.251M);
+            var maintenanceCostsCriterion = costCriterion.SubcriterionNodes.Add("Maintenance costs", 0.100M);
+            var resaleValueCriterion = costCriterion.SubcriterionNodes.Add("Resale value", 0.161M);
+            
+            var cargoCapacityCriterion = capacityNode.SubcriterionNodes.Add("Cargo capacity", 0.167M);
+            var passengerCapacityCriterion = capacityNode.SubcriterionNodes.Add("Passenger capacity", 0.833M);
 
-            CriterionNode purchasePriceCriterion = costCriterion.SubcriterionNodes.Add("Purchase price", 0.488M);
-            CriterionNode fuelCostsCriterion = costCriterion.SubcriterionNodes.Add("Fuel costs", 0.251M);
-            CriterionNode maintenanceCostsCriterion = costCriterion.SubcriterionNodes.Add("Maintenance costs", 0.100M);
-            CriterionNode resaleValueCriterion = costCriterion.SubcriterionNodes.Add("Resale value", 0.161M);
-
-            CriterionNode cargoCapacityCriterion = capacityNode.SubcriterionNodes.Add("Cargo capacity", 0.167M);
-            CriterionNode passengerCapacityCriterion = capacityNode.SubcriterionNodes.Add("Passenger capacity", 0.833M);
-
-            Alternative alternative1 = hierarchy.Alternatives.Add("Accord sedan");
-            Alternative alternative2 = hierarchy.Alternatives.Add("Accord Hybrid");
-            Alternative alternative3 = hierarchy.Alternatives.Add("Pilot CUV");
-            Alternative alternative4 = hierarchy.Alternatives.Add("CR-V SUV");
-            Alternative alternative5 = hierarchy.Alternatives.Add("Element SUV");
-            Alternative alternative6 = hierarchy.Alternatives.Add("Odyssey Minivan");
+            var alternative1 = hierarchy.Alternatives.Add("Accord sedan");
+            var alternative2 = hierarchy.Alternatives.Add("Accord Hybrid");
+            var alternative3 = hierarchy.Alternatives.Add("Pilot CUV");
+            var alternative4 = hierarchy.Alternatives.Add("CR-V SUV");
+            var alternative5 = hierarchy.Alternatives.Add("Element SUV");
+            var alternative6 = hierarchy.Alternatives.Add("Odyssey Minivan");
 
             #region Alternative node local priorities
 
@@ -101,8 +101,8 @@ namespace Ahp.Tests
             #endregion
 
             //Act
-            HierarchyProcessor processor = new HierarchyProcessor();
-            AnalysisResult result = processor.Analyse(hierarchy);
+            var processor = new HierarchyProcessor();
+            var result = processor.Analyse(hierarchy);
 
             //Assert
             Assert.AreEqual(result[alternative1], 0.212885342M);

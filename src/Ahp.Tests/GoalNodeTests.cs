@@ -15,7 +15,7 @@ namespace Ahp.Tests
         public void GoalNode_Constructor_SetsName()
         {
             //Arrange => Act
-            GoalNode goal = new GoalNode("My Goal");
+            var goal = new GoalNode("My Goal");
 
             //Assert
             Assert.AreEqual("My Goal", goal.Name);
@@ -25,7 +25,7 @@ namespace Ahp.Tests
         public void GoalNode_LocalPriority_AfterInit_Returns1M()
         {
             //Arrange => Act
-            GoalNode goal = new GoalNode();
+            var goal = new GoalNode();
 
             //Assert
             Assert.AreEqual(1M, goal.LocalPriority);
@@ -35,7 +35,7 @@ namespace Ahp.Tests
         public void GoalNode_LocalPrioritySetter_ThrowsException()
         {
             //Arrange
-            GoalNode goal = new GoalNode();
+            var goal = new GoalNode();
             Exception exception = null;
 
             //Act
@@ -58,7 +58,7 @@ namespace Ahp.Tests
         public void GoalNode_GlobalPriority_AfterInit_Returns1M()
         {
             //Arrange => Act
-            GoalNode goal = new GoalNode();
+            var goal = new GoalNode();
 
             //Assert
             Assert.AreEqual(1M, goal.GlobalPriority);
@@ -68,8 +68,8 @@ namespace Ahp.Tests
         public void GoalNode_CriterionNodesAdd_AdsWithFixUp()
         {
             //Arrange
-            GoalNode goal = new GoalNode();
-            CriterionNode criterion = new CriterionNode();
+            var goal = new GoalNode();
+            var criterion = new CriterionNode();
 
             //Act
             goal.CriterionNodes.Add(criterion);
@@ -82,8 +82,8 @@ namespace Ahp.Tests
         public void GoalNode_CriterionNodesRemove_RemovesWithFixUp()
         {
             //Arrange
-            GoalNode goal = new GoalNode();
-            CriterionNode criterion = new CriterionNode();
+            var goal = new GoalNode();
+            var criterion = new CriterionNode();
 
             //Act
             goal.CriterionNodes.Add(criterion);
@@ -97,9 +97,9 @@ namespace Ahp.Tests
         public void GoalNode_CriterionNodesClear_ClearsWithFixUp()
         {
             //Arrange
-            GoalNode goal = new GoalNode("Goal");
-            CriterionNode criterion1 = new CriterionNode("Criterion1");
-            CriterionNode criterion2 = new CriterionNode("Criterion2");
+            var goal = new GoalNode("Goal");
+            var criterion1 = new CriterionNode("Criterion1");
+            var criterion2 = new CriterionNode("Criterion2");
 
             //Act
             goal.CriterionNodes.Add(criterion1);

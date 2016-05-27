@@ -15,9 +15,9 @@ namespace Ahp.Tests
         public void AlternativeNodeCollection_Indexer_ValidIndex_ReturnsAlternativeNode()
         {
             //Arrange => Act
-            AlternativeNodeCollection alternativeNodes = new AlternativeNodeCollection();
-            AlternativeNode alternativeNode1 = new AlternativeNode(new Alternative("Alternative1"));
-            AlternativeNode alternativeNode2 = new AlternativeNode(new Alternative("Alternative2"));
+            var alternativeNodes = new AlternativeNodeCollection();
+            var alternativeNode1 = new AlternativeNode(new Alternative("Alternative1"));
+            var alternativeNode2 = new AlternativeNode(new Alternative("Alternative2"));
             alternativeNodes.Add(alternativeNode1);
             alternativeNodes.Add(alternativeNode2);
 
@@ -30,12 +30,12 @@ namespace Ahp.Tests
         public void AlternativeNodeCollection_Indexer_ValidAlternative_ReturnsAlternativeNode()
         {
             //Arrange => Act
-            AlternativeNodeCollection alternativeNodes = new AlternativeNodeCollection();
-            Alternative alternative1 = new Alternative("Alternative1");
-            Alternative alternative2 = new Alternative("Alternative2");
-            Alternative alternative3 = new Alternative("Alternative2");
-            AlternativeNode alternativeNode1 = new AlternativeNode(alternative1);
-            AlternativeNode alternativeNode2 = new AlternativeNode(alternative2);
+            var alternativeNodes = new AlternativeNodeCollection();
+            var alternative1 = new Alternative("Alternative1");
+            var alternative2 = new Alternative("Alternative2");
+            var alternative3 = new Alternative("Alternative2");
+            var alternativeNode1 = new AlternativeNode(alternative1);
+            var alternativeNode2 = new AlternativeNode(alternative2);
             alternativeNodes.Add(alternativeNode1);
             alternativeNodes.Add(alternativeNode2);
 
@@ -46,32 +46,40 @@ namespace Ahp.Tests
         }
 
         [TestMethod]
-        public void AlternativeNodeCollection_Add_AdsAlternativeNodeOnlyOnce()
+        public void AlternativeNodeCollection_AddTwice_ThrowsException()
         {
             //Arrange
-            AlternativeNodeCollection alternativeNodes = new AlternativeNodeCollection();
-            AlternativeNode alternativeNode1 = new AlternativeNode(new Alternative("Alternative1"));
-            AlternativeNode alternativeNode2 = new AlternativeNode(new Alternative("Alternative2"));            
+            var alternativeNodes = new AlternativeNodeCollection();
+            var alternativeNode1 = new AlternativeNode(new Alternative("Alternative1"));
+            Exception exception = null;
 
             //Act
             alternativeNodes.Add(alternativeNode1);
-            alternativeNodes.Add(alternativeNode2);
-            alternativeNodes.Add(alternativeNode2);
+            try
+            {
+                alternativeNodes.Add(alternativeNode1);
+            }
+            catch (Exception ex) 
+            {
+                exception = ex;
+            }            
 
             //Assert
-            Assert.AreEqual(2, alternativeNodes.Count);
+            Assert.AreEqual(1, alternativeNodes.Count);
             Assert.AreEqual(alternativeNode1, alternativeNodes[0]);
-            Assert.AreEqual(alternativeNode2, alternativeNodes[1]);
+            Assert.IsNotNull(exception);
+            Assert.IsInstanceOfType(exception, typeof(ArgumentException));
+            Assert.AreEqual("Same item can not be added twice.", exception.Message);
         }
 
         [TestMethod]
         public void AlternativeNodeCollection_Add_NodeWithDuplicateAlternative_ThrowsException()
         {
             //Arrange
-            AlternativeNodeCollection alternativeNodes = new AlternativeNodeCollection();
-            Alternative alternative = new Alternative();
-            AlternativeNode alternativeNode1 = new AlternativeNode(alternative);
-            AlternativeNode alternativeNode2 = new AlternativeNode(alternative);
+            var alternativeNodes = new AlternativeNodeCollection();
+            var alternative = new Alternative();
+            var alternativeNode1 = new AlternativeNode(alternative);
+            var alternativeNode2 = new AlternativeNode(alternative);
             Exception exception = null;
 
             //Act
@@ -95,9 +103,9 @@ namespace Ahp.Tests
         public void AlternativeNodeCollection_Contains_AlternativeNode_ReturnsCorrectResult()
         {
             //Arrange
-            AlternativeNodeCollection alternativeNodes = new AlternativeNodeCollection();
-            AlternativeNode alternativeNode1 = new AlternativeNode(new Alternative("Alternative1"));
-            AlternativeNode alternativeNode2 = new AlternativeNode(new Alternative("Alternative2"));
+            var alternativeNodes = new AlternativeNodeCollection();
+            var alternativeNode1 = new AlternativeNode(new Alternative("Alternative1"));
+            var alternativeNode2 = new AlternativeNode(new Alternative("Alternative2"));
 
             //Act
             alternativeNodes.Add(alternativeNode1);
@@ -111,12 +119,12 @@ namespace Ahp.Tests
         public void AlternativeNodeCollection_Contains_Alternative_ReturnsCorrectResult()
         {
             //Arrange => Act
-            AlternativeNodeCollection alternativeNodes = new AlternativeNodeCollection();
-            Alternative alternative1 = new Alternative("Alternative1");
-            Alternative alternative2 = new Alternative("Alternative2");
-            Alternative alternative3 = new Alternative("Alternative2");
-            AlternativeNode alternativeNode1 = new AlternativeNode(alternative1);
-            AlternativeNode alternativeNode2 = new AlternativeNode(alternative2);
+            var alternativeNodes = new AlternativeNodeCollection();
+            var alternative1 = new Alternative("Alternative1");
+            var alternative2 = new Alternative("Alternative2");
+            var alternative3 = new Alternative("Alternative2");
+            var alternativeNode1 = new AlternativeNode(alternative1);
+            var alternativeNode2 = new AlternativeNode(alternative2);
             alternativeNodes.Add(alternativeNode1);
             alternativeNodes.Add(alternativeNode2);
 
@@ -130,8 +138,8 @@ namespace Ahp.Tests
         public void AlternativeCollection_Remove_RemovesAlternative()
         {
             //Arrange
-            AlternativeNodeCollection alternativeNodes = new AlternativeNodeCollection();
-            AlternativeNode alternativeNode = new AlternativeNode(new Alternative("Alternative"));
+            var alternativeNodes = new AlternativeNodeCollection();
+            var alternativeNode = new AlternativeNode(new Alternative("Alternative"));
 
             //Act
             alternativeNodes.Add(alternativeNode);
@@ -145,9 +153,9 @@ namespace Ahp.Tests
         public void AlternativeCollection_Clear_ClearsCollection()
         {
             //Arrange
-            AlternativeNodeCollection alternativeNodes = new AlternativeNodeCollection();
-            AlternativeNode alternativeNode1 = new AlternativeNode(new Alternative("Alternative1"));
-            AlternativeNode alternativeNode2 = new AlternativeNode(new Alternative("Alternative2"));
+            var alternativeNodes = new AlternativeNodeCollection();
+            var alternativeNode1 = new AlternativeNode(new Alternative("Alternative1"));
+            var alternativeNode2 = new AlternativeNode(new Alternative("Alternative2"));
 
             //Act
             alternativeNodes.Add(alternativeNode1);

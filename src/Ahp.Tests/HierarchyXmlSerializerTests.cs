@@ -14,20 +14,20 @@ namespace Ahp.Tests
         public void HierarchyXmlSerializer_Serialize_ReturnsCorrectXml()
         {
             //Arrange
-            
+
             #region Hierarchy
 
-            Hierarchy hierarchy = new Hierarchy("Choose optimal car");
+            var hierarchy = new Hierarchy("Choose optimal car");
 
-            Alternative accord = hierarchy.Alternatives.Add("A", "Accord");
-            Alternative accordHybrid = hierarchy.Alternatives.Add("AH", "Accord Hybrid");
-            Alternative civic = hierarchy.Alternatives.Add("C", "Civic");
+            var accord = hierarchy.Alternatives.Add("A", "Accord");
+            var accordHybrid = hierarchy.Alternatives.Add("AH", "Accord Hybrid");
+            var civic = hierarchy.Alternatives.Add("C", "Civic");
 
-            CriterionNode style = hierarchy.GoalNode.CriterionNodes.Add("Style", 0.4M);
-            CriterionNode capacity = hierarchy.GoalNode.CriterionNodes.Add("Capacity", 0.6M);
+            var style = hierarchy.GoalNode.CriterionNodes.Add("Style", 0.4M);
+            var capacity = hierarchy.GoalNode.CriterionNodes.Add("Capacity", 0.6M);
 
-            CriterionNode cargoCapacity = capacity.SubcriterionNodes.Add("Cargo capacity", 0.2M);
-            CriterionNode passengerCapacity = capacity.SubcriterionNodes.Add("Passenger capacity", 0.8M);
+            var cargoCapacity = capacity.SubcriterionNodes.Add("Cargo capacity", 0.2M);
+            var passengerCapacity = capacity.SubcriterionNodes.Add("Passenger capacity", 0.8M);
 
             hierarchy[accord, style].LocalPriority = 0.350M;
             hierarchy[accordHybrid, style].LocalPriority = 0.350M;
@@ -45,7 +45,7 @@ namespace Ahp.Tests
 
             #region Expected XML
 
-            StringBuilder stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             stringBuilder.Append("<?xml version=\"1.0\" encoding=\"utf-16\"?>");
             stringBuilder.Append("<hierarchy>");
 
@@ -142,7 +142,7 @@ namespace Ahp.Tests
             #endregion
 
             //Act
-            HierarchyXmlSerializer serializer = new HierarchyXmlSerializer();
+            var serializer = new HierarchyXmlSerializer();
             string expectedXml = stringBuilder.ToString();
             string realXml = serializer.Serialize(hierarchy);
 

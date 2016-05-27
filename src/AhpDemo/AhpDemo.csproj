@@ -55,6 +55,7 @@
     </ApplicationDefinition>
     <Compile Include="ExpressionUtils.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Models\HierarchyManager.cs" />
     <Compile Include="ViewModels\Hierarchy\AlternativesNodeViewModel.cs" />
     <Compile Include="ViewModels\Hierarchy\AlternativeNodeViewModel.cs" />
     <Compile Include="ViewModels\Hierarchy\CriterionNodeViewModel.cs" />
@@ -111,7 +112,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Ahp\Ahp.csproj">
+      <Project>{ef3625c7-086a-45d6-907f-c6bb7183b400}</Project>
+      <Name>Ahp</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

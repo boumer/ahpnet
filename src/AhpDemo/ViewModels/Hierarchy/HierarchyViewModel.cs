@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Ahp;
+using AhpDemo.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -12,13 +14,15 @@ namespace AhpDemo.ViewModels
     public class HierarchyViewModel : ViewModelBase
     {
         private Dispatcher _dispatcher;
+        private HierarchyManager _manager;
 
         public GoalNodeViewModel GoalNode { get; private set; }
         public AlternativesNodeViewModel AlternativesNode { get; private set; }
 
-        public HierarchyViewModel()
+        public HierarchyViewModel(HierarchyManager manager)
         {
             _dispatcher = Dispatcher.CurrentDispatcher;
+            _manager = manager;
 
             InitializeNodes();
         }
@@ -43,6 +47,17 @@ namespace AhpDemo.ViewModels
 
             AlternativesNode = new AlternativesNodeViewModel(this);
             Nodes.Add(AlternativesNode);
+        }
+
+        private void UpdateHierarchy()
+        {
+            foreach (var alternative in _manager.Hierarchy.Alternatives)
+            {
+                if (AlternativesNode.Children.Cast<AlternativeNodeViewModel>().SingleOrDefault(x => x.Alternative == alternative) == null)
+                {
+                    var alternativeNode = new AlternativeNodeViewModel(this, alternative);
+                }
+            }
         }
     }
 }

@@ -114,7 +114,7 @@ namespace AhpDemo.ViewModels
                 (
                     (x) =>
                     {
-                        var alternative = new AlternativeNodeViewModel(Hierarchy) { Name = "Alternative" };
+                        var alternative = new AlternativeNodeViewModel(Hierarchy, new Ahp.Alternative("Alternative"));
                         Hierarchy.AlternativesNode.AddChild(alternative);
                     },
                     (x) => { return true; }

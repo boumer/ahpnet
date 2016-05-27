@@ -15,10 +15,10 @@ namespace Ahp.Tests
         public void AlternativeCollection_Add_Name_ReturnsNewAlternative()
         {
             //Arrange
-            AlternativeCollection alternatives = new AlternativeCollection();
+            var alternatives = new AlternativeCollection();
 
             //Act
-            Alternative alternative = alternatives.Add("Alternative");
+            var alternative = alternatives.Add("Alternative");
 
             //Assert
             Assert.AreEqual(1, alternatives.Count);
@@ -31,10 +31,10 @@ namespace Ahp.Tests
         public void AlternativeCollection_Add_IdAndName_ReturnsNewAlternative()
         {
             //Arrange
-            AlternativeCollection alternatives = new AlternativeCollection();
+            var alternatives = new AlternativeCollection();
 
             //Act
-            Alternative alternative = alternatives.Add("ID123", "Alternative");
+            var alternative = alternatives.Add("ID123", "Alternative");
 
             //Assert
             Assert.AreEqual(1, alternatives.Count);
@@ -47,43 +47,51 @@ namespace Ahp.Tests
         public void AlternativeCollection_Add_Alternative_ReturnsIndex()
         {
             //Arrange
-            AlternativeCollection alternatives = new AlternativeCollection();
-            Alternative alternative = new Alternative("Alternative");
+            var alternatives = new AlternativeCollection();
+            var alternative = new Alternative("Alternative");
+            var index = 0;
 
             //Act
-            int index = alternatives.Add(alternative);
+            alternatives.Add(alternative);
 
             //Assert
-            Assert.AreEqual(0, index);
             Assert.AreEqual(alternative, alternatives[index]);
         }
 
         [TestMethod]
-        public void AlternativeCollection_Add_Alternative_AddsAlternativeOnlyOnce()
+        public void AlternativeCollection_Add_AlternativeTwice_ThrowsException()
         {
             //Arrange
-            AlternativeCollection alternatives = new AlternativeCollection();
-            Alternative alternative1 = new Alternative("Alternative1");
-            Alternative alternative2 = new Alternative("Alternative2");
+            var alternatives = new AlternativeCollection();
+            var alternative1 = new Alternative("Alternative1");
+            Exception exception = null;
 
             //Act
             alternatives.Add(alternative1);
-            alternatives.Add(alternative2);
-            alternatives.Add(alternative2);
+            try
+            {
+                alternatives.Add(alternative1);
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }            
 
             //Assert
-            Assert.AreEqual(2, alternatives.Count);
+            Assert.AreEqual(1, alternatives.Count);
             Assert.AreEqual(alternative1, alternatives[0]);
-            Assert.AreEqual(alternative2, alternatives[1]);
+            Assert.IsNotNull(exception);
+            Assert.IsInstanceOfType(exception, typeof(ArgumentException));
+            Assert.AreEqual("Same item can not be added twice.", exception.Message);
         }
 
         [TestMethod]
         public void AlternativeCollection_Contains_ReturnsCorrectResult()
         {
             //Arrange
-            AlternativeCollection alternatives = new AlternativeCollection();
-            Alternative alternative1 = new Alternative("Alternative1");
-            Alternative alternative2 = new Alternative("Alternative2");
+            var alternatives = new AlternativeCollection();
+            var alternative1 = new Alternative("Alternative1");
+            var alternative2 = new Alternative("Alternative2");
 
             //Act
             alternatives.Add(alternative1);
@@ -97,8 +105,8 @@ namespace Ahp.Tests
         public void AlternativeCollection_Remove_RemovesAlternative()
         {
             //Arrange
-            AlternativeCollection alternatives = new AlternativeCollection();
-            Alternative alternative = new Alternative("Alternative1");
+            var alternatives = new AlternativeCollection();
+            var alternative = new Alternative("Alternative1");
 
             //Act
             alternatives.Add(alternative);
@@ -112,9 +120,9 @@ namespace Ahp.Tests
         public void AlternativeCollection_Clear_ClearsCollection()
         {
             //Arrange
-            AlternativeCollection alternatives = new AlternativeCollection();
-            Alternative alternative1 = new Alternative();
-            Alternative alternative2 = new Alternative();
+            var alternatives = new AlternativeCollection();
+            var alternative1 = new Alternative();
+            var alternative2 = new Alternative();
 
             //Act
             alternatives.Add(alternative1);

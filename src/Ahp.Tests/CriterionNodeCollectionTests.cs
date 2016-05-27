@@ -15,9 +15,9 @@ namespace Ahp.Tests
         public void CriterionNodeCollection_Indexer_ByIndex_ReturnsCriterionNode()
         {
             //Arrange => Act
-            CriterionNodeCollection criterions = new CriterionNodeCollection();
-            CriterionNode criterion1 = new CriterionNode();
-            CriterionNode criterion2 = new CriterionNode();
+            var criterions = new CriterionNodeCollection();
+            var criterion1 = new CriterionNode();
+            var criterion2 = new CriterionNode();
             criterions.Add(criterion1);
             criterions.Add(criterion2);
 
@@ -30,10 +30,10 @@ namespace Ahp.Tests
         public void CriterionNodeCollection_Add_Name_ReturnsNewCriterion()
         {
             //Arrange
-            CriterionNodeCollection criterions = new CriterionNodeCollection();
+            var criterions = new CriterionNodeCollection();
 
             //Act
-            CriterionNode criterion = criterions.Add("Criterion");
+            var criterion = criterions.Add("Criterion");
 
             //Assert
             Assert.AreEqual(1, criterions.Count);
@@ -46,10 +46,10 @@ namespace Ahp.Tests
         public void CriterionNodeCollection_Add_NameAndWeight_ReturnsNewCriterion()
         {
             //Arrange
-            CriterionNodeCollection criterions = new CriterionNodeCollection();
+            var criterions = new CriterionNodeCollection();
 
             //Act
-            CriterionNode criterion = criterions.Add("Criterion", 0.345M);
+            var criterion = criterions.Add("Criterion", 0.345M);
 
             //Assert
             Assert.AreEqual(1, criterions.Count);
@@ -59,31 +59,39 @@ namespace Ahp.Tests
         }
 
         [TestMethod]
-        public void CriterionNodeCollection_Add_CriterionNode_AddsCriterionNodeOnlyOnce()
+        public void CriterionNodeCollection_AddTwice_ThrowsException()
         {
             //Arrange
-            CriterionNodeCollection criterions = new CriterionNodeCollection();
-            CriterionNode criterion1 = new CriterionNode("Criterion1");
-            CriterionNode criterion2 = new CriterionNode("Criterion2");
+            var criterions = new CriterionNodeCollection();
+            var criterion1 = new CriterionNode("Criterion1");
+            Exception exception = null;
 
             //Act
             criterions.Add(criterion1);
-            criterions.Add(criterion2);
-            criterions.Add(criterion2);
+            try
+            {
+                criterions.Add(criterion1);
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
 
             //Assert
-            Assert.AreEqual(2, criterions.Count);
+            Assert.AreEqual(1, criterions.Count);
             Assert.AreEqual(criterion1, criterions[0]);
-            Assert.AreEqual(criterion2, criterions[1]);
+            Assert.IsNotNull(exception);
+            Assert.IsInstanceOfType(exception, typeof(ArgumentException));
+            Assert.AreEqual("Same item can not be added twice.", exception.Message);
         }
 
         [TestMethod]
         public void CriterionNodeCollection_Contains_ReturnsCorrectResult()
         {
             //Arrange
-            CriterionNodeCollection criterions = new CriterionNodeCollection();
-            CriterionNode criterion1 = new CriterionNode("Criterion1");
-            CriterionNode criterion2 = new CriterionNode("Criterion2");
+            var criterions = new CriterionNodeCollection();
+            var criterion1 = new CriterionNode("Criterion1");
+            var criterion2 = new CriterionNode("Criterion2");
 
             //Act
             criterions.Add(criterion1);
@@ -97,8 +105,8 @@ namespace Ahp.Tests
         public void CriterionNodeCollection_Remove_RemovesCriterionNode()
         {
             //Arrange
-            CriterionNodeCollection criterions = new CriterionNodeCollection();
-            CriterionNode criterion = new CriterionNode("Criterion1");
+            var criterions = new CriterionNodeCollection();
+            var criterion = new CriterionNode("Criterion1");
 
             //Act
             criterions.Add(criterion);
@@ -112,9 +120,9 @@ namespace Ahp.Tests
         public void CriterionNodeCollection_Clear_ClearsCollection()
         {
             //Arrange
-            CriterionNodeCollection criterions = new CriterionNodeCollection();
-            CriterionNode criterion1 = new CriterionNode();
-            CriterionNode criterion2 = new CriterionNode();
+            var criterions = new CriterionNodeCollection();
+            var criterion1 = new CriterionNode();
+            var criterion2 = new CriterionNode();
 
             //Act
             criterions.Add(criterion1);

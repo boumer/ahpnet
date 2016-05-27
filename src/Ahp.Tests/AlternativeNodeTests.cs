@@ -20,7 +20,7 @@ namespace Ahp.Tests
             //Act
             try
             {
-                AlternativeNode alternative = new AlternativeNode(null);
+                var alternative = new AlternativeNode(null);
             }
             catch (Exception e)
             {
@@ -36,7 +36,7 @@ namespace Ahp.Tests
         public void AlternativeNode_Name_ReturnsAlternativeName()
         {
             //Arange => Act
-            AlternativeNode alternativeNode = new AlternativeNode(new Alternative("Alternative"));
+            var alternativeNode = new AlternativeNode(new Alternative("Alternative"));
 
             //Assert
             Assert.AreEqual("Alternative", alternativeNode.Name);
@@ -46,7 +46,7 @@ namespace Ahp.Tests
         public void AlternativeNode_Name_Setter_ThrowsException()
         {
             //Arrange
-            AlternativeNode alternativeNode = new AlternativeNode(new Alternative("Alternative"));
+            var alternativeNode = new AlternativeNode(new Alternative("Alternative"));
             Exception exception = null;
 
             //Act
@@ -69,9 +69,9 @@ namespace Ahp.Tests
         public void AlternativeNode_GlobalPriority_ReturnsCorrectValue()
         {
             //Arrange => Act
-            AlternativeNode alternativeNode1 = new AlternativeNode(new Alternative(), 0.791M);
-            AlternativeNode alternativeNode2 = new AlternativeNode(new Alternative(), 0.673M);
-            CriterionNode criterion = new CriterionNode("Criterion", 0.374M);
+            var alternativeNode1 = new AlternativeNode(new Alternative(), 0.791M);
+            var alternativeNode2 = new AlternativeNode(new Alternative(), 0.673M);
+            var criterion = new CriterionNode("Criterion", 0.374M);
             criterion.AlternativeNodes.Add(alternativeNode2);
 
             //Assert
@@ -83,8 +83,8 @@ namespace Ahp.Tests
         public void CriterionNode_CriterionNode_SetsCriterionNode()
         {
             //Arrange
-            AlternativeNode alternativeNode = new AlternativeNode(new Alternative());
-            CriterionNode criterion = new CriterionNode();
+            var alternativeNode = new AlternativeNode(new Alternative());
+            var criterion = new CriterionNode();
 
             //Act
             alternativeNode.CriterionNode = criterion;
@@ -98,9 +98,9 @@ namespace Ahp.Tests
         public void CriterionNode_CriterionNode_ExistingCriterion_ChangesCriterionNode()
         {
             //Arrange
-            AlternativeNode alternativeNode = new AlternativeNode(new Alternative());
-            CriterionNode criterion = new CriterionNode();
-            CriterionNode criterionNew = new CriterionNode();
+            var alternativeNode = new AlternativeNode(new Alternative());
+            var criterion = new CriterionNode();
+            var criterionNew = new CriterionNode();
 
             //Act
             alternativeNode.CriterionNode = criterion;
@@ -116,8 +116,8 @@ namespace Ahp.Tests
         public void CriterionNode_CriterionNode_ExistingCriterion_SetsCriterionNodeToNull()
         {
             //Arrange
-            AlternativeNode alternativeNode = new AlternativeNode(new Alternative());
-            CriterionNode criterion = new CriterionNode();            
+            var alternativeNode = new AlternativeNode(new Alternative());
+            var criterion = new CriterionNode();            
 
             //Act
             alternativeNode.CriterionNode = criterion;

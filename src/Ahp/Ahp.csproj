@@ -73,6 +73,7 @@
     <Compile Include="Hierarchy.cs" />
     <Compile Include="HierarchyProcessor.cs" />
     <Compile Include="Node.cs" />
+    <Compile Include="NotificationCollection.cs" />
     <Compile Include="PairwiseComparison.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Xml\HierarchyXmlSerializer.cs" />
