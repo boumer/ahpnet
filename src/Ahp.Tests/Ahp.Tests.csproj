@@ -65,7 +65,6 @@
     <Compile Include="GoalNodeTests.cs" />
     <Compile Include="HierarchyProcessorTests.cs" />
     <Compile Include="HierarchyTests.cs" />
-    <Compile Include="HierarchyXmlSerializerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
