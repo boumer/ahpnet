@@ -8,10 +8,10 @@ namespace Ahp
     {
         private readonly decimal[] RI = new decimal[] { 0, 0, 0.58M, 0.90M, 1.12M, 1.24M, 1.32M, 1.41M, 1.45M, 1.49M };
 
-        private List<Node> nodes = null;
-        private decimal[,] importances = null;
-        private decimal[] selfVector = null;
-        private decimal[] priorities = null;
+        private List<Node> _nodes = null;
+        private decimal[,] _importances = null;
+        private decimal[] _selfVector = null;
+        private decimal[] _priorities = null;
 
         private decimal lMax;
         public decimal LMax
@@ -21,19 +21,19 @@ namespace Ahp
 
         public decimal CI
         {
-            get { return (lMax - nodes.Count) / (nodes.Count - 1M); }
+            get { return (lMax - _nodes.Count) / (_nodes.Count - 1M); }
         }
 
         public decimal CR
         {
             get 
             {
-                if (nodes.Count > 10)
+                if (_nodes.Count > 10)
                 {
                     throw new InvalidOperationException("Consistency Ratio can not be calculated");
                 }
 
-                return CI / RI[nodes.Count - 1];
+                return CI / RI[_nodes.Count - 1];
             }
         }
 
@@ -46,12 +46,12 @@ namespace Ahp
                 throw new ArgumentNullException("criterions");
             }
 
-            nodes = new List<Node>();
+            _nodes = new List<Node>();
             foreach (var criterion in criterions)
             {
-                if (!nodes.Contains(criterion))
+                if (!_nodes.Contains(criterion))
                 {
-                    nodes.Add(criterion);
+                    _nodes.Add(criterion);
                 }
             }
 
@@ -66,12 +66,12 @@ namespace Ahp
                 throw new ArgumentNullException("alternatives");
             }
 
-            nodes = new List<Node>();
+            _nodes = new List<Node>();
             foreach (var alternative in alternatives)
             {
-                if (!nodes.Contains(alternative))
+                if (!_nodes.Contains(alternative))
                 {
-                    nodes.Add(alternative);
+                    _nodes.Add(alternative);
                 }
             }
 
@@ -81,7 +81,7 @@ namespace Ahp
 
         private void CheckNodes()
         {
-            if (nodes.Count < 2)
+            if (_nodes.Count < 2)
             {
                 throw new InvalidOperationException("Minimum 2 unique nodes are expected for pairwise comparison.");
             }
@@ -89,24 +89,24 @@ namespace Ahp
 
         private void Init()
         {
-            importances = new decimal[nodes.Count, nodes.Count];
-            for (int i = 0; i < nodes.Count; i++)
+            _importances = new decimal[_nodes.Count, _nodes.Count];
+            for (int i = 0; i < _nodes.Count; i++)
             {
-                for (int j = 0; j < nodes.Count; j++)
+                for (int j = 0; j < _nodes.Count; j++)
                 {
-                    importances[i, j] = 1M;
+                    _importances[i, j] = 1M;
                 }
             }
 
-            selfVector = new decimal[nodes.Count];
-            priorities = new decimal[nodes.Count];
-            for (int i = 0; i < nodes.Count; i++)
+            _selfVector = new decimal[_nodes.Count];
+            _priorities = new decimal[_nodes.Count];
+            for (int i = 0; i < _nodes.Count; i++)
             {
-                selfVector[i] = 1M;
-                priorities[i] = 1M / nodes.Count;
+                _selfVector[i] = 1M;
+                _priorities[i] = 1M / _nodes.Count;
             }
 
-            lMax = nodes.Count;
+            lMax = _nodes.Count;
 
             AutoCalculate = true;
         }
@@ -125,20 +125,20 @@ namespace Ahp
                     throw new ArgumentNullException("node2");
                 }
 
-                if (!nodes.Contains(node1))
+                if (!_nodes.Contains(node1))
                 {
                     throw new KeyNotFoundException("Parameter node1 is not found in the nodes of the PairwiseComparison object.");
                 }
 
-                if (!nodes.Contains(node2))
+                if (!_nodes.Contains(node2))
                 {
                     throw new KeyNotFoundException("Parameter node2 is not found in the nodes of the PairwiseComparison object.");
                 }
 
-                int index1 = nodes.IndexOf(node1);
-                int index2 = nodes.IndexOf(node2);
+                int index1 = _nodes.IndexOf(node1);
+                int index2 = _nodes.IndexOf(node2);
 
-                return importances[index1, index2];
+                return _importances[index1, index2];
             }
             set
             {
@@ -152,12 +152,12 @@ namespace Ahp
                     throw new ArgumentNullException("node2");
                 }
 
-                if (!nodes.Contains(node1))
+                if (!_nodes.Contains(node1))
                 {
                     throw new KeyNotFoundException("Parameter node1 is not found in the nodes of the PairwiseComparison object.");
                 }
 
-                if (!nodes.Contains(node2))
+                if (!_nodes.Contains(node2))
                 {
                     throw new KeyNotFoundException("Parameter node2 is not found in the nodes of the PairwiseComparison object.");
                 }
@@ -167,15 +167,15 @@ namespace Ahp
                     throw new ArgumentOutOfRangeException("value");
                 }
 
-                int index1 = nodes.IndexOf(node1);
-                int index2 = nodes.IndexOf(node2);
+                int index1 = _nodes.IndexOf(node1);
+                int index2 = _nodes.IndexOf(node2);
                 if (index1 == index2)
                 {
                     value = 1M;
                 }
 
-                importances[index1, index2] = value;
-                importances[index2, index1] = 1 / value;
+                _importances[index1, index2] = value;
+                _importances[index2, index1] = 1 / value;
 
                 if (AutoCalculate)
                 {
@@ -193,50 +193,50 @@ namespace Ahp
                     throw new ArgumentNullException("node");
                 }
 
-                if (!nodes.Contains(node))
+                if (!_nodes.Contains(node))
                 {
                     throw new KeyNotFoundException("Parameter node is not found in the nodes of the PairwiseComparison object.");
                 }
 
-                int index = nodes.IndexOf(node);
+                int index = _nodes.IndexOf(node);
 
-                return priorities[index];
+                return _priorities[index];
             }
         }
 
         public void Calculate()
         {
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < _nodes.Count; i++)
             {
-                selfVector[i] = 1M;
+                _selfVector[i] = 1M;
             }
 
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < _nodes.Count; i++)
             {
-                for (int j = 0; j < nodes.Count; j++)
+                for (int j = 0; j < _nodes.Count; j++)
                 {
-                    selfVector[i] *= importances[i, j];
+                    _selfVector[i] *= _importances[i, j];
                 }
             }
 
             decimal sum = 0M;
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < _nodes.Count; i++)
             {
-                selfVector[i] = (decimal)Math.Pow((double)selfVector[i], (double)(1M / nodes.Count));
-                sum += selfVector[i];
+                _selfVector[i] = (decimal)Math.Pow((double)_selfVector[i], (double)(1M / _nodes.Count));
+                sum += _selfVector[i];
             }
 
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < _nodes.Count; i++)
             {
-                priorities[i] = selfVector[i] / sum;
+                _priorities[i] = _selfVector[i] / sum;
             }
 
             lMax = 0M;
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < _nodes.Count; i++)
             {
-                for (int j = 0; j < nodes.Count; j++)
+                for (int j = 0; j < _nodes.Count; j++)
                 {
-                    lMax += importances[i, j] * priorities[j];
+                    lMax += _importances[i, j] * _priorities[j];
                 }
             }
         }

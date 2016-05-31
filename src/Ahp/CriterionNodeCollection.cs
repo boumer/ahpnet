@@ -5,10 +5,6 @@ using System.Collections;
 
 namespace Ahp
 {
-    /// <summary>
-    /// Strongly typed collection of AlternativeNode objects.
-    /// Notifies clients about changes via callback methods.
-    /// </summary>
     public class CriterionNodeCollection : NotificationCollection<CriterionNode>
     {
         public CriterionNodeCollection()

@@ -4,9 +4,6 @@ using System.Text;
 
 namespace Ahp
 {
-    /// <summary>
-    /// Represents AHP goal node. This is root node of the hierarchy.
-    /// </summary>
     public class GoalNode : Node
     {
         public GoalNode()
@@ -16,9 +13,9 @@ namespace Ahp
         public GoalNode(string name)
             : base(name, 1M)
         {
-            criterionNodes = new CriterionNodeCollection(HandleChildAdded, HandleChildRemoved);
+            _criterionNodes = new CriterionNodeCollection(HandleChildAdded, HandleChildRemoved);
         }
-        
+
         public override decimal LocalPriority
         {
             get { return 1M; }
@@ -30,24 +27,17 @@ namespace Ahp
             get { return 1M; }
         }
 
-        private CriterionNodeCollection criterionNodes;
-        /// <summary>
-        /// Colletion of child criterion nodes
-        /// </summary>
+        private CriterionNodeCollection _criterionNodes;
         public CriterionNodeCollection CriterionNodes
         {
-            get { return criterionNodes; }
+            get { return _criterionNodes; }
         }
 
-        /// <summary>
-        /// Returns array of criterion nodes, which are at lowest level in the hierarchy
-        /// </summary>
-        /// <returns></returns>
         public ICollection<CriterionNode> GetLowestCriterionNodes()
         {
-            List<CriterionNode> nodes = new List<CriterionNode>();
+            var nodes = new List<CriterionNode>();
 
-            foreach (CriterionNode criterionNode in criterionNodes)
+            foreach (var criterionNode in _criterionNodes)
             {
                 LookForLowestCriterionNodes(criterionNode, nodes);
             }
@@ -59,7 +49,7 @@ namespace Ahp
         {
             if (node.HasSubcriterionNodes)
             {
-                foreach (CriterionNode subcriterionNode in node.SubcriterionNodes)
+                foreach (var subcriterionNode in node.SubcriterionNodes)
                 {
                     LookForLowestCriterionNodes(subcriterionNode, nodes);
                 }
@@ -72,7 +62,7 @@ namespace Ahp
 
         private void HandleChildAdded(CriterionNode node)
         {
-            if (!Object.ReferenceEquals(node.GoalNode, this))
+            if (!object.ReferenceEquals(node.GoalNode, this))
             {
                 node.GoalNode = this;
             }
@@ -80,7 +70,7 @@ namespace Ahp
 
         private void HandleChildRemoved(CriterionNode node)
         {
-            if (Object.ReferenceEquals(node.GoalNode, this))
+            if (object.ReferenceEquals(node.GoalNode, this))
             {
                 node.GoalNode = null;
             }

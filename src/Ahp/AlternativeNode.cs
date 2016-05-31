@@ -4,9 +4,6 @@ using System.Text;
 
 namespace Ahp
 {
-    /// <summary>
-    /// Represents alternative node in AHP hierarchy
-    /// </summary>
     public class AlternativeNode : Node
     {
         public AlternativeNode(Alternative alternative)
@@ -21,28 +18,22 @@ namespace Ahp
                 throw new ArgumentNullException("alternative");
             }
 
-            this.alternative = alternative;
+            _alternative = alternative;
         }
-        
-        /// <summary>
-        /// Node name
-        /// </summary>
+
         public override string Name
         {
-            get { return alternative.Name; }
+            get { return _alternative.Name; }
             set { throw new InvalidOperationException("Changing Name property of AlternativeNode object directly is not allowed. Change Name property of correspondent Alternative object instead."); }
         }
 
-        /// <summary>
-        /// Global priority of the node
-        /// </summary>
         public override decimal GlobalPriority
         {
             get
             {
-                if (!Object.ReferenceEquals(null, criterionNode))
+                if (!object.ReferenceEquals(null, _criterionNode))
                 {
-                    return this.LocalPriority * criterionNode.GlobalPriority;
+                    return this.LocalPriority * _criterionNode.GlobalPriority;
                 }
                 else
                 {
@@ -51,30 +42,24 @@ namespace Ahp
             }
         }
 
-        private Alternative alternative;
-        /// <summary>
-        /// Correspondent alternative object
-        /// </summary>        
+        private Alternative _alternative;
         public Alternative Alternative
         {
-            get { return alternative; }
+            get { return _alternative; }
         }
 
-        private CriterionNode criterionNode;
-        /// <summary>
-        /// Parent criterion Node
-        /// </summary>
+        private CriterionNode _criterionNode;
         public CriterionNode CriterionNode
         {
-            get { return criterionNode; }
+            get { return _criterionNode; }
             set
             {
-                if (criterionNode != null)
+                if (_criterionNode != null)
                 {
-                    criterionNode.AlternativeNodes.Remove(this);
+                    _criterionNode.AlternativeNodes.Remove(this);
                 }
 
-                criterionNode = value;
+                _criterionNode = value;
                 if (value != null && !value.AlternativeNodes.Contains(this))
                 {
                     value.AlternativeNodes.Add(this);

@@ -5,11 +5,6 @@ using System.Collections;
 
 namespace Ahp
 {
-    /// <summary>
-    /// Strongly typed collection of AlternativeNode objects.
-    /// Notifies clients about changes via callback methods.
-    /// Does not allow to add AlternativeNode objects with the same Alternative instances.
-    /// </summary>
     public class AlternativeNodeCollection : NotificationCollection<AlternativeNode>
     {
         public AlternativeNodeCollection()
@@ -36,6 +31,19 @@ namespace Ahp
             }
         }
 
+        public bool Contains(Alternative alternative)
+        {
+            foreach (var alternativeNode in this)
+            {
+                if (alternativeNode.Alternative.Equals(alternative))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         protected override void ValidateBeforeAdd(AlternativeNode item)
         {
             base.ValidateBeforeAdd(item);
@@ -45,18 +53,5 @@ namespace Ahp
                 throw new ArgumentException("AlternativeNode with the same value of Alternative property has already been added");
             }
         }
-
-        public bool Contains(Alternative alternative)
-        {
-            foreach (AlternativeNode alternativeNode in this)
-            {
-                if (alternativeNode.Alternative.Equals(alternative))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }        
     }
 }

@@ -4,9 +4,6 @@ using System.Text;
 
 namespace Ahp
 {
-    /// <summary>
-    /// Represents criterion node in AHP hierarchy
-    /// </summary>
     public class CriterionNode : Node
     {
         public CriterionNode()
@@ -20,20 +17,17 @@ namespace Ahp
         public CriterionNode(string name, decimal localPriority)
             : base(name, localPriority)
         {
-            subcriterionNodes = new CriterionNodeCollection(HandleChildCriterionAdded, HandleChildCriterionRemoved);
-            alternativeNodes = new AlternativeNodeCollection(HandleAlternativeAdded, HandleAlternativeRemoved);
+            _subcriterionNodes = new CriterionNodeCollection(HandleChildCriterionAdded, HandleChildCriterionRemoved);
+            _alternativeNodes = new AlternativeNodeCollection(HandleAlternativeAdded, HandleAlternativeRemoved);
         }
         
-        /// <summary>
-        /// Global priority of the node
-        /// </summary>
         public override decimal GlobalPriority
         {
             get
             {
-                if (!Object.ReferenceEquals(null, parentCriterionNode))
+                if (!object.ReferenceEquals(null, _parentCriterionNode))
                 {
-                    return this.LocalPriority * parentCriterionNode.GlobalPriority;
+                    return this.LocalPriority * _parentCriterionNode.GlobalPriority;
                 }
                 else
                 {
@@ -42,21 +36,18 @@ namespace Ahp
             }
         }
 
-        private GoalNode goalNode;
-        /// <summary>
-        /// Parent goal node
-        /// </summary>
+        private GoalNode _goalNode;
         public GoalNode GoalNode
         {
-            get { return goalNode; }
+            get { return _goalNode; }
             set
             {
-                if (goalNode != null)
+                if (_goalNode != null)
                 {
                     this.GoalNode.CriterionNodes.Remove(this);
                 }
 
-                goalNode = value;
+                _goalNode = value;
                 if (value != null)
                 {
                     if (!value.CriterionNodes.Contains(this))
@@ -68,65 +59,58 @@ namespace Ahp
             }
         }
 
-        private CriterionNode parentCriterionNode;
-        /// <summary>
-        /// Parent criterion node
-        /// </summary>
+        private CriterionNode _parentCriterionNode;
         public CriterionNode ParentCriterionNode
         {
-            get { return parentCriterionNode; }
+            get { return _parentCriterionNode; }
             set
             {
-                if (parentCriterionNode != null)
+                if (_parentCriterionNode != null)
                 {
-                    parentCriterionNode.SubcriterionNodes.Remove(this);
+                    _parentCriterionNode.SubcriterionNodes.Remove(this);
                 }
 
-                parentCriterionNode = value;
+                _parentCriterionNode = value;
+
                 if (value != null)
                 {
                     if (!value.SubcriterionNodes.Contains(this))
                     {
                         value.SubcriterionNodes.Add(this);
                     }
+
                     GoalNode = null;
                 }
             }
         }
 
-        private CriterionNodeCollection subcriterionNodes;
-        /// <summary>
-        /// Collection of child subcriterion nodes
-        /// </summary>
+        private CriterionNodeCollection _subcriterionNodes;
         public CriterionNodeCollection SubcriterionNodes
         {
-            get { return subcriterionNodes; }
+            get { return _subcriterionNodes; }
         }
 
-        private AlternativeNodeCollection alternativeNodes;
-        /// <summary>
-        /// Collection of child alternative nodes
-        /// </summary>
+        private AlternativeNodeCollection _alternativeNodes;
         public AlternativeNodeCollection AlternativeNodes
         {
-            get { return alternativeNodes; }
+            get { return _alternativeNodes; }
         }
 
         public bool HasSubcriterionNodes
         {
-            get { return subcriterionNodes.Count > 0; }
+            get { return _subcriterionNodes.Count > 0; }
         }
 
         public bool HasAlternativeNodes
         {
-            get { return alternativeNodes.Count > 0; }
+            get { return _alternativeNodes.Count > 0; }
         }
 
-        #region Bidirectional associations fix-up
+        #region Bidirectional associations fixup
 
         private void HandleChildCriterionAdded(CriterionNode node)
         {
-            if (!Object.ReferenceEquals(node.ParentCriterionNode, this))
+            if (!object.ReferenceEquals(node.ParentCriterionNode, this))
             {
                 node.ParentCriterionNode = this;
             }
@@ -135,7 +119,7 @@ namespace Ahp
 
         private void HandleChildCriterionRemoved(CriterionNode node)
         {
-            if (Object.ReferenceEquals(node.ParentCriterionNode, this))
+            if (object.ReferenceEquals(node.ParentCriterionNode, this))
             {
                 node.ParentCriterionNode = null;
             }
@@ -143,7 +127,7 @@ namespace Ahp
 
         private void HandleAlternativeAdded(AlternativeNode node)
         {
-            if (!Object.ReferenceEquals(node.CriterionNode, this))
+            if (!object.ReferenceEquals(node.CriterionNode, this))
             {
                 node.CriterionNode = this;
             }
@@ -152,7 +136,7 @@ namespace Ahp
 
         private void HandleAlternativeRemoved(AlternativeNode node)
         {
-            if (Object.ReferenceEquals(node.CriterionNode, this))
+            if (object.ReferenceEquals(node.CriterionNode, this))
             {
                 node.CriterionNode = null;
             }

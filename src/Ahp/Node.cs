@@ -4,9 +4,6 @@ using System.Text;
 
 namespace Ahp
 {
-    /// <summary>
-    /// Base class for all node classes
-    /// </summary>
     public abstract class Node
     {
         public Node()
@@ -19,33 +16,24 @@ namespace Ahp
 
         public Node(string name, decimal localPriority)
         {
-            this.name = name;
-            this.localPriority = localPriority;
+            _name = name;
+            _localPriority = localPriority;
         }
         
-        private string name;
-        /// <summary>
-        /// Name of the node
-        /// </summary>
+        private string _name;
         public virtual string Name
         {
-            get { return name; }
-            set { name = value; }
+            get { return _name; }
+            set { _name = value; }
         }
 
-        private decimal localPriority;
-        /// <summary>
-        /// Local priority of the node
-        /// </summary>
+        private decimal _localPriority;
         public virtual decimal LocalPriority
         {
-            get { return localPriority; }
-            set { localPriority = value; }
+            get { return _localPriority; }
+            set { _localPriority = value; }
         }
 
-        /// <summary>
-        /// Global priority of the node
-        /// </summary>
         public abstract decimal GlobalPriority { get; }
     }
 }

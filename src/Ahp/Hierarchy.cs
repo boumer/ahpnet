@@ -4,9 +4,6 @@ using System.Text;
 
 namespace Ahp
 {
-    /// <summary>
-    /// Represents AHP hierarchy
-    /// </summary>
     public class Hierarchy
     {
         public Hierarchy()
@@ -15,34 +12,22 @@ namespace Ahp
 
         public Hierarchy(string goalName)
         {
-            goalNode = new GoalNode(goalName);
-            alternatives = new AlternativeCollection(HandleAlternativeAdded, HandleAlternativeRemoved);
+            _goalNode = new GoalNode(goalName);
+            _alternatives = new AlternativeCollection(HandleAlternativeAdded, HandleAlternativeRemoved);
         }
         
-        private GoalNode goalNode;
-        /// <summary>
-        /// Root node of the hierarchy
-        /// </summary>
+        private GoalNode _goalNode;
         public GoalNode GoalNode
         {
-            get { return goalNode; }
+            get { return _goalNode; }
         }
 
-        private AlternativeCollection alternatives;
-        /// <summary>
-        /// Collection of alternatives
-        /// </summary>
+        private AlternativeCollection _alternatives;
         public AlternativeCollection Alternatives
         {
-            get { return alternatives; }
+            get { return _alternatives; }
         }
 
-        /// <summary>
-        /// Returns AlternativeNode object by Alternative and CriterionNode objects
-        /// </summary>
-        /// <param name="alternative"></param>
-        /// <param name="criterion"></param>
-        /// <returns></returns>
         public AlternativeNode this[Alternative alternative, CriterionNode criterion]
         {
             get
@@ -52,7 +37,7 @@ namespace Ahp
                     throw new KeyNotFoundException(String.Format("Alternative '{0}' not found in the Altenatives collection of the hierarchy", alternative.Name));
                 }
 
-                ICollection<CriterionNode> nodes = GoalNode.GetLowestCriterionNodes();
+                var nodes = GoalNode.GetLowestCriterionNodes();
                 if (!nodes.Contains(criterion))
                 {
                     throw new KeyNotFoundException(String.Format("Criterion node '{0}' not found in the criterion nodes which are at lowest level of the hierarchy", criterion.Name));
@@ -61,12 +46,12 @@ namespace Ahp
                 RefreshAlternativeNodes();
 
                 AlternativeNode result = null;
-                foreach (CriterionNode node in nodes)
+                foreach (var node in nodes)
                 {
-                    foreach (AlternativeNode alternativeNode in node.AlternativeNodes)
+                    foreach (var alternativeNode in node.AlternativeNodes)
                     {
-                        if (Object.ReferenceEquals(node, criterion) &&
-                            Object.ReferenceEquals(alternativeNode.Alternative, alternative))
+                        if (object.ReferenceEquals(node, criterion) &&
+                            object.ReferenceEquals(alternativeNode.Alternative, alternative))
                         {
                             result = alternativeNode;
                         }
@@ -79,9 +64,9 @@ namespace Ahp
 
         public void RefreshAlternativeNodes()
         {
-            foreach (CriterionNode criterionNode in GoalNode.GetLowestCriterionNodes())
+            foreach (var criterionNode in GoalNode.GetLowestCriterionNodes())
             {
-                foreach (Alternative alternative in Alternatives)
+                foreach (var alternative in Alternatives)
                 {
                     if (!criterionNode.AlternativeNodes.Contains(alternative))
                     {
@@ -89,8 +74,8 @@ namespace Ahp
                     }
                 }
 
-                AlternativeNodeCollection toBeRemoved = new AlternativeNodeCollection();
-                foreach (AlternativeNode alternativeNode in criterionNode.AlternativeNodes)
+                var toBeRemoved = new AlternativeNodeCollection();
+                foreach (var alternativeNode in criterionNode.AlternativeNodes)
                 {
                     if (!this.Alternatives.Contains(alternativeNode.Alternative))
                     {
@@ -98,7 +83,7 @@ namespace Ahp
                     }
                 }
 
-                foreach (AlternativeNode alternativeNode in toBeRemoved)
+                foreach (var alternativeNode in toBeRemoved)
                 {
                     criterionNode.AlternativeNodes.Remove(alternativeNode);
                 }
@@ -107,7 +92,7 @@ namespace Ahp
 
         private void HandleAlternativeAdded(Alternative alternative)
         {
-            foreach (CriterionNode lowestCriterionNode in goalNode.GetLowestCriterionNodes())
+            foreach (var lowestCriterionNode in _goalNode.GetLowestCriterionNodes())
             {
                 lowestCriterionNode.AlternativeNodes.Add(new AlternativeNode(alternative));
             }
@@ -115,9 +100,9 @@ namespace Ahp
 
         private void HandleAlternativeRemoved(Alternative alternative)
         {
-            foreach (CriterionNode lowestCriterionNode in goalNode.GetLowestCriterionNodes())
+            foreach (var lowestCriterionNode in _goalNode.GetLowestCriterionNodes())
             {
-                AlternativeNode toBeDeleted = lowestCriterionNode.AlternativeNodes[alternative];
+                var toBeDeleted = lowestCriterionNode.AlternativeNodes[alternative];
                 lowestCriterionNode.AlternativeNodes.Remove(toBeDeleted);
             }
         }
