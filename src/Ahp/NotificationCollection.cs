@@ -7,7 +7,7 @@ namespace Ahp
 {
     public delegate void NotificationCollectionCallback<T>(T item);
 
-    public abstract class NotificationCollection<T> : IList<T>
+    public class NotificationCollection<T> : IList<T>
     {
         private List<T> _list = new List<T>();
 

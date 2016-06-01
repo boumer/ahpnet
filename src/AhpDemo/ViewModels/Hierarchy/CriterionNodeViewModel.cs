@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ahp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,13 @@ namespace AhpDemo.ViewModels
 {
     public class CriterionNodeViewModel : HierarchyNodeViewModel
     {
-        public CriterionNodeViewModel(HierarchyViewModel hierarchy)
+        public CriterionNode Criterion { get; private set; }
+
+        public CriterionNodeViewModel(HierarchyViewModel hierarchy, CriterionNode criterion)
             : base(hierarchy)
         {
-            Name = "Criterion";
+            Criterion = criterion;
+            Name = criterion.Name;
         }
     }
 }

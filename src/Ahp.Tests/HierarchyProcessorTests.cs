@@ -20,10 +20,10 @@ namespace Ahp.Tests
             //Arrange
             var hierarchy = new Hierarchy("Choose optimal car");
 
-            var costCriterion = hierarchy.GoalNode.CriterionNodes.Add("Cost", 0.504M);
-            var safetyCriterion = hierarchy.GoalNode.CriterionNodes.Add("Safety", 0.237M);
-            var styleCriterion = hierarchy.GoalNode.CriterionNodes.Add("Style", 0.042M);
-            var capacityNode = hierarchy.GoalNode.CriterionNodes.Add("Capacity", 0.217M);
+            var costCriterion = hierarchy.GoalNode.AddCriterionNode("Cost", 0.504M);
+            var safetyCriterion = hierarchy.GoalNode.AddCriterionNode("Safety", 0.237M);
+            var styleCriterion = hierarchy.GoalNode.AddCriterionNode("Style", 0.042M);
+            var capacityNode = hierarchy.GoalNode.AddCriterionNode("Capacity", 0.217M);
             
             var purchasePriceCriterion = costCriterion.SubcriterionNodes.Add("Purchase price", 0.488M);
             var fuelCostsCriterion = costCriterion.SubcriterionNodes.Add("Fuel costs", 0.251M);
@@ -105,12 +105,12 @@ namespace Ahp.Tests
             var result = processor.Analyse(hierarchy);
 
             //Assert
-            Assert.AreEqual(result[alternative1], 0.212885342M);
-            Assert.AreEqual(result[alternative2], 0.150225038M);
-            Assert.AreEqual(result[alternative3], 0.109231639M);
-            Assert.AreEqual(result[alternative4], 0.164945910M);
-            Assert.AreEqual(result[alternative5], 0.142593084M);
-            Assert.AreEqual(result[alternative6], 0.220118987M);
+            Assert.AreEqual(0.212885342M, result[alternative1]);
+            Assert.AreEqual(0.150225038M, result[alternative2]);
+            Assert.AreEqual(0.109231639M, result[alternative3]);
+            Assert.AreEqual(0.164945910M, result[alternative4]);
+            Assert.AreEqual(0.142593084M, result[alternative5]);
+            Assert.AreEqual(0.220118987M, result[alternative6]);
         }
     }
 }

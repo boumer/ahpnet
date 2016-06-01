@@ -14,7 +14,7 @@ namespace Ahp
                 result.Add(alternative, 0M);
             }
 
-            foreach (var node in hierarchy.GoalNode.GetLowestCriterionNodes())
+            foreach (var node in hierarchy.GetLowestCriterionNodes())
             {
                 foreach (var alternative in hierarchy.Alternatives)
                 {

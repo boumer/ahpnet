@@ -20,66 +20,31 @@ namespace Ahp
             _subcriterionNodes = new CriterionNodeCollection(HandleChildCriterionAdded, HandleChildCriterionRemoved);
             _alternativeNodes = new AlternativeNodeCollection(HandleAlternativeAdded, HandleAlternativeRemoved);
         }
-        
-        public override decimal GlobalPriority
-        {
-            get
-            {
-                if (!object.ReferenceEquals(null, _parentCriterionNode))
-                {
-                    return this.LocalPriority * _parentCriterionNode.GlobalPriority;
-                }
-                else
-                {
-                    return this.LocalPriority;
-                }
-            }
-        }
 
-        private GoalNode _goalNode;
         public GoalNode GoalNode
         {
-            get { return _goalNode; }
-            set
-            {
-                if (_goalNode != null)
-                {
-                    this.GoalNode.CriterionNodes.Remove(this);
-                }
-
-                _goalNode = value;
-                if (value != null)
-                {
-                    if (!value.CriterionNodes.Contains(this))
-                    {
-                        value.CriterionNodes.Add(this);
-                    }
-                    ParentCriterionNode = null;
-                }
-            }
+            get { return ParentNode as GoalNode; }
+            set { ParentNode = value; }
         }
 
-        private CriterionNode _parentCriterionNode;
         public CriterionNode ParentCriterionNode
         {
-            get { return _parentCriterionNode; }
+            get { return ParentNode as CriterionNode; }
             set
             {
-                if (_parentCriterionNode != null)
+                if (ParentCriterionNode != null)
                 {
-                    _parentCriterionNode.SubcriterionNodes.Remove(this);
+                    ParentCriterionNode.SubcriterionNodes.Remove(this);
                 }
 
-                _parentCriterionNode = value;
+                ParentNode = value;
 
                 if (value != null)
                 {
                     if (!value.SubcriterionNodes.Contains(this))
                     {
                         value.SubcriterionNodes.Add(this);
-                    }
-
-                    GoalNode = null;
+                    }                    
                 }
             }
         }

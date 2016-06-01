@@ -51,7 +51,7 @@ namespace Ahp.Tests
             //Assert
             Assert.IsNotNull(exception);
             Assert.IsInstanceOfType(exception, typeof(InvalidOperationException));
-            Assert.AreEqual(exception.Message, "Changing local priority of the GoalNode is not allowed. Its value always equals 1.");
+            Assert.AreEqual(exception.Message, "Setting local priority for the GoalNode is not allowed. Its value always equals 1.");
         }
 
         [TestMethod]
@@ -65,77 +65,32 @@ namespace Ahp.Tests
         }
 
         [TestMethod]
-        public void GoalNode_CriterionNodesAdd_AdsWithFixUp()
+        public void GoalNode_AddCriterionNode_AdsWithFixUp()
         {
             //Arrange
             var goal = new GoalNode();
             var criterion = new CriterionNode();
 
             //Act
-            goal.CriterionNodes.Add(criterion);
+            goal.AddCriterionNode(criterion);
 
             //Assert
             Assert.AreEqual(goal, criterion.GoalNode);
         }
 
         [TestMethod]
-        public void GoalNode_CriterionNodesRemove_RemovesWithFixUp()
+        public void GoalNode_RemoveCriterionNode_RemovesWithFixUp()
         {
             //Arrange
             var goal = new GoalNode();
             var criterion = new CriterionNode();
 
             //Act
-            goal.CriterionNodes.Add(criterion);
-            goal.CriterionNodes.Remove(criterion);
+            goal.AddCriterionNode(criterion);
+            goal.RemoveCriterionNode(criterion);
 
             //Assert
             Assert.IsNull(criterion.GoalNode);
-        }
-
-        [TestMethod]
-        public void GoalNode_CriterionNodesClear_ClearsWithFixUp()
-        {
-            //Arrange
-            var goal = new GoalNode("Goal");
-            var criterion1 = new CriterionNode("Criterion1");
-            var criterion2 = new CriterionNode("Criterion2");
-
-            //Act
-            goal.CriterionNodes.Add(criterion1);
-            goal.CriterionNodes.Add(criterion2);
-            goal.CriterionNodes.Clear();
-
-            //Assert
-            Assert.IsNull(criterion1.GoalNode);
-            Assert.IsNull(criterion2.GoalNode);
-        }
-
-        [TestMethod]
-        public void GoalNode_GetLowestCriterionNodes_ReturnsCorrectNodes()
-        {
-            //Arrange
-            var goal = new GoalNode();
-            var criterion1 = goal.CriterionNodes.Add("Criterion1");
-            var criterion11 = criterion1.SubcriterionNodes.Add("Criterion11");
-            var criterion111 = criterion11.SubcriterionNodes.Add("Criterion111");
-            var criterion112 = criterion11.SubcriterionNodes.Add("Criterion112");
-            var criterion12 = criterion1.SubcriterionNodes.Add("Criterion12");
-            var criterion121 = criterion12.SubcriterionNodes.Add("Criterion121");
-            var criterion2 = goal.CriterionNodes.Add("Criterion2");
-            var criterion21 = criterion2.SubcriterionNodes.Add("Criterion21");
-            var criterion3 = goal.CriterionNodes.Add("Criterion3");
-
-            //Act
-            var criterions = goal.GetLowestCriterionNodes();
-            
-            //Assert
-            Assert.AreEqual(5, criterions.Count);
-            Assert.IsTrue(criterions.Contains(criterion111));
-            Assert.IsTrue(criterions.Contains(criterion112));
-            Assert.IsTrue(criterions.Contains(criterion121));
-            Assert.IsTrue(criterions.Contains(criterion21));
-            Assert.IsTrue(criterions.Contains(criterion3));
         }
     }
 }

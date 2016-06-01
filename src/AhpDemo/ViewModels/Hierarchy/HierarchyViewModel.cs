@@ -14,7 +14,8 @@ namespace AhpDemo.ViewModels
     public class HierarchyViewModel : ViewModelBase
     {
         private Dispatcher _dispatcher;
-        private HierarchyManager _manager;
+
+        public HierarchyManager Manager { get; set; }
 
         public GoalNodeViewModel GoalNode { get; private set; }
         public AlternativesNodeViewModel AlternativesNode { get; private set; }
@@ -22,7 +23,9 @@ namespace AhpDemo.ViewModels
         public HierarchyViewModel(HierarchyManager manager)
         {
             _dispatcher = Dispatcher.CurrentDispatcher;
-            _manager = manager;
+
+            Manager = manager;
+            Manager.HierarchyChanged += HandleHierarchyChanged;
 
             InitializeNodes();
         }
@@ -49,13 +52,28 @@ namespace AhpDemo.ViewModels
             Nodes.Add(AlternativesNode);
         }
 
+        private void HandleHierarchyChanged()
+        {
+            UpdateHierarchy();
+        }
+
         private void UpdateHierarchy()
         {
-            foreach (var alternative in _manager.Hierarchy.Alternatives)
+            foreach (var alternative in Manager.Hierarchy.Alternatives)
             {
                 if (AlternativesNode.Children.Cast<AlternativeNodeViewModel>().SingleOrDefault(x => x.Alternative == alternative) == null)
                 {
                     var alternativeNode = new AlternativeNodeViewModel(this, alternative);
+                    AlternativesNode.AddChild(alternativeNode);
+                }
+            }
+
+            foreach (var alternativeNode in AlternativesNode.Children.Cast<AlternativeNodeViewModel>().ToArray())
+            {
+                var alternative = Manager.Hierarchy.Alternatives.SingleOrDefault(x => x == alternativeNode.Alternative);
+                if (alternative == null)
+                {
+                    AlternativesNode.RemoveChild(alternativeNode);
                 }
             }
         }

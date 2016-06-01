@@ -90,14 +90,14 @@ namespace AhpDemo.ViewModels
                         var goal = x as GoalNodeViewModel;
                         if (goal != null)
                         {
-                            goal.AddChild(new CriterionNodeViewModel(Hierarchy) { Name = "Criterion" });
+                            //goal.AddChild(new CriterionNodeViewModel(Hierarchy) { Name = "Criterion" });
                             return;
                         }
 
                         var criterion = x as CriterionNodeViewModel;
                         if (criterion != null)
                         {
-                            criterion.AddChild(new CriterionNodeViewModel(Hierarchy) { Name = "SubCriterion" });
+                            //criterion.AddChild(new CriterionNodeViewModel(Hierarchy) { Name = "SubCriterion" });
                             return;
                         }
                     },
@@ -112,11 +112,7 @@ namespace AhpDemo.ViewModels
             {
                 return new RelayCommand
                 (
-                    (x) =>
-                    {
-                        var alternative = new AlternativeNodeViewModel(Hierarchy, new Ahp.Alternative("Alternative"));
-                        Hierarchy.AlternativesNode.AddChild(alternative);
-                    },
+                    (x) => { Hierarchy.Manager.AddAlternative("Alternative"); },
                     (x) => { return true; }
                 );
             }
@@ -129,6 +125,12 @@ namespace AhpDemo.ViewModels
                 return new RelayCommand(
                     (x) =>
                     {
+                        var criterionNode = x as CriterionNodeViewModel;
+                        if (criterionNode != null)
+                        {
+                            Hierarchy.Manager.RemoveCriterion(criterionNode.Criterion);
+                        }
+
                         var node = x as HierarchyNodeViewModel;
                         if (node.Parent != null)
                         {

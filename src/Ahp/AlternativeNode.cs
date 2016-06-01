@@ -27,43 +27,28 @@ namespace Ahp
             set { throw new InvalidOperationException("Changing Name property of AlternativeNode object directly is not allowed. Change Name property of correspondent Alternative object instead."); }
         }
 
-        public override decimal GlobalPriority
-        {
-            get
-            {
-                if (!object.ReferenceEquals(null, _criterionNode))
-                {
-                    return this.LocalPriority * _criterionNode.GlobalPriority;
-                }
-                else
-                {
-                    return this.LocalPriority;
-                }
-            }
-        }
-
         private Alternative _alternative;
         public Alternative Alternative
         {
             get { return _alternative; }
         }
 
-        private CriterionNode _criterionNode;
         public CriterionNode CriterionNode
         {
-            get { return _criterionNode; }
+            get { return ParentNode as CriterionNode; }
             set
             {
-                if (_criterionNode != null)
+                if (CriterionNode != null)
                 {
-                    _criterionNode.AlternativeNodes.Remove(this);
+                    CriterionNode.AlternativeNodes.Remove(this);
                 }
 
-                _criterionNode = value;
+                ParentNode = value;
+
                 if (value != null && !value.AlternativeNodes.Contains(this))
                 {
                     value.AlternativeNodes.Add(this);
-                }
+                }                
             }
         }
     }

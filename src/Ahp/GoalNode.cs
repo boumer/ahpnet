@@ -12,68 +12,52 @@ namespace Ahp
 
         public GoalNode(string name)
             : base(name, 1M)
-        {
-            _criterionNodes = new CriterionNodeCollection(HandleChildAdded, HandleChildRemoved);
-        }
+        { }
 
         public override decimal LocalPriority
         {
             get { return 1M; }
-            set { throw new InvalidOperationException("Changing local priority of the GoalNode is not allowed. Its value always equals 1."); }
+            set { throw new InvalidOperationException("Setting local priority for the GoalNode is not allowed. Its value always equals 1."); }
         }
 
-        public override decimal GlobalPriority
+        protected override Node ParentNode
         {
-            get { return 1M; }
+            get { return null; }
+            set { throw new InvalidOperationException("Setting ParentNode for the GoalNode is not allowed. Its value is always null."); }
         }
 
-        private CriterionNodeCollection _criterionNodes;
-        public CriterionNodeCollection CriterionNodes
+        public IEnumerable<CriterionNode> CriterionNodes
         {
-            get { return _criterionNodes; }
-        }
-
-        public ICollection<CriterionNode> GetLowestCriterionNodes()
-        {
-            var nodes = new List<CriterionNode>();
-
-            foreach (var criterionNode in _criterionNodes)
+            get
             {
-                LookForLowestCriterionNodes(criterionNode, nodes);
-            }
-
-            return nodes;
-        }
-
-        private void LookForLowestCriterionNodes(CriterionNode node, ICollection<CriterionNode> nodes)
-        {
-            if (node.HasSubcriterionNodes)
-            {
-                foreach (var subcriterionNode in node.SubcriterionNodes)
+                foreach (var child in ChildNodes)
                 {
-                    LookForLowestCriterionNodes(subcriterionNode, nodes);
+                    yield return (CriterionNode)child;
                 }
             }
-            else
-            {
-                nodes.Add(node);
-            }
         }
 
-        private void HandleChildAdded(CriterionNode node)
+        public CriterionNode AddCriterionNode(string name)
         {
-            if (!object.ReferenceEquals(node.GoalNode, this))
-            {
-                node.GoalNode = this;
-            }
+            return AddCriterionNode(name, 0M);
         }
 
-        private void HandleChildRemoved(CriterionNode node)
+        public CriterionNode AddCriterionNode(string name, decimal weight)
         {
-            if (object.ReferenceEquals(node.GoalNode, this))
-            {
-                node.GoalNode = null;
-            }
+            var node = new CriterionNode(name, weight);
+            AddCriterionNode(node);
+
+            return node;
+        }
+
+        public void AddCriterionNode(CriterionNode node)
+        {
+            ChildNodes.Add(node);
+        }
+
+        public void RemoveCriterionNode(CriterionNode node)
+        {
+            ChildNodes.Remove(node);
         }
     }
 }
