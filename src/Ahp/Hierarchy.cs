@@ -69,6 +69,26 @@ namespace Ahp
             }
         }
 
+        public bool ContainsCriterionNode(CriterionNode node)
+        {
+            return GoalNode.SearchChildNodes<CriterionNode>(x => x == node).Count == 1;
+        }
+
+        public void RemoveCriterionNode(CriterionNode node)
+        {
+            if (ContainsCriterionNode(node))
+            {
+                if (node.GoalNode != null)
+                {
+                    node.GoalNode.RemoveCriterionNode(node);
+                }
+                else if (node.ParentCriterionNode != null)
+                {
+                    node.ParentCriterionNode.RemoveSubcriterionNode(node);
+                }
+            }
+        }
+
         public ICollection<CriterionNode> GetLowestCriterionNodes()
         {
             return GoalNode.SearchChildNodes<CriterionNode>((node) => node.SubcriterionNodes.Count == 0);

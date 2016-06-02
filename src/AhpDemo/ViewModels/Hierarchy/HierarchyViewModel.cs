@@ -59,6 +59,48 @@ namespace AhpDemo.ViewModels
 
         private void UpdateHierarchy()
         {
+            UpdateCriterionNodes();
+            UpdateAlternativeNodes();
+        }
+
+        private void UpdateCriterionNodes()
+        {
+            var criterionNodes = GoalNode.GetAllCriterionNodes().ToList();
+            var criterions = Manager.Hierarchy.GoalNode.SearchChildNodes<CriterionNode>(x => x is CriterionNode).OrderBy(x => x.Level).ToList();
+
+            foreach (var criterion in criterions)
+            {
+                var criterionNode = criterionNodes.SingleOrDefault(x => x.Criterion == criterion);
+                if (criterionNode == null)
+                {
+                    criterionNode = new CriterionNodeViewModel(this, criterion);
+                    criterionNodes.Add(criterionNode);
+                }
+
+                var parentNode = (criterion.GoalNode != null) ? (HierarchyNodeViewModel)GoalNode : (HierarchyNodeViewModel)criterionNodes.Single(x => x.Criterion == criterion.ParentCriterionNode);
+                if (criterionNode.Parent != null && criterionNode.Parent != parentNode)
+                {
+                    criterionNode.Parent.RemoveChild(criterionNode);
+                }
+
+                if (criterionNode.Parent != parentNode)
+                {
+                    parentNode.AddChild(criterionNode);
+                }
+            }
+
+            foreach (var criterionNode in criterionNodes.ToArray())
+            {
+                var criterion = criterions.SingleOrDefault(x => x == criterionNode.Criterion);
+                if (criterion == null)
+                {
+                    criterionNode.Parent.RemoveChild(criterionNode);
+                }
+            }
+        }
+
+        private void UpdateAlternativeNodes()
+        {
             foreach (var alternative in Manager.Hierarchy.Alternatives)
             {
                 if (AlternativesNode.Children.Cast<AlternativeNodeViewModel>().SingleOrDefault(x => x.Alternative == alternative) == null)

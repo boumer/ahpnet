@@ -53,6 +53,11 @@ namespace Ahp
             }
         }
 
+        public int Level
+        {
+            get { return (ParentNode == null) ? 1 : ParentNode.Level + 1; }
+        }
+
         private Node _parentNode;
         protected virtual Node ParentNode
         {

@@ -24,9 +24,28 @@ namespace AhpDemo.Models
             OnHierarchyChanged();
         }
 
+        public void RemoveAlternative(Alternative alternative)
+        {
+            Hierarchy.RemoveAlternative(alternative);
+            OnHierarchyChanged();
+        }
+
+        internal void AddCriterion(string name)
+        {
+            Hierarchy.GoalNode.AddCriterionNode(name);
+            OnHierarchyChanged();
+        }
+
+        public void AddSubcriterion(CriterionNode parent, string name)
+        {
+            parent.AddSubcriterionNode(name);
+            OnHierarchyChanged();
+        }
+
         public void RemoveCriterion(CriterionNode criterion)
         {
-            //Hierarchy.RemoveCriterionNode(criterion);
+            Hierarchy.RemoveCriterionNode(criterion);
+            OnHierarchyChanged();
         }
 
         private void OnHierarchyChanged()
