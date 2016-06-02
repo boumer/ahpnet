@@ -25,20 +25,20 @@ namespace Ahp.Tests
             var styleCriterion = hierarchy.GoalNode.AddCriterionNode("Style", 0.042M);
             var capacityNode = hierarchy.GoalNode.AddCriterionNode("Capacity", 0.217M);
             
-            var purchasePriceCriterion = costCriterion.SubcriterionNodes.Add("Purchase price", 0.488M);
-            var fuelCostsCriterion = costCriterion.SubcriterionNodes.Add("Fuel costs", 0.251M);
-            var maintenanceCostsCriterion = costCriterion.SubcriterionNodes.Add("Maintenance costs", 0.100M);
-            var resaleValueCriterion = costCriterion.SubcriterionNodes.Add("Resale value", 0.161M);
+            var purchasePriceCriterion = costCriterion.AddSubcriterionNode("Purchase price", 0.488M);
+            var fuelCostsCriterion = costCriterion.AddSubcriterionNode("Fuel costs", 0.251M);
+            var maintenanceCostsCriterion = costCriterion.AddSubcriterionNode("Maintenance costs", 0.100M);
+            var resaleValueCriterion = costCriterion.AddSubcriterionNode("Resale value", 0.161M);
             
-            var cargoCapacityCriterion = capacityNode.SubcriterionNodes.Add("Cargo capacity", 0.167M);
-            var passengerCapacityCriterion = capacityNode.SubcriterionNodes.Add("Passenger capacity", 0.833M);
+            var cargoCapacityCriterion = capacityNode.AddSubcriterionNode("Cargo capacity", 0.167M);
+            var passengerCapacityCriterion = capacityNode.AddSubcriterionNode("Passenger capacity", 0.833M);
 
-            var alternative1 = hierarchy.Alternatives.Add("Accord sedan");
-            var alternative2 = hierarchy.Alternatives.Add("Accord Hybrid");
-            var alternative3 = hierarchy.Alternatives.Add("Pilot CUV");
-            var alternative4 = hierarchy.Alternatives.Add("CR-V SUV");
-            var alternative5 = hierarchy.Alternatives.Add("Element SUV");
-            var alternative6 = hierarchy.Alternatives.Add("Odyssey Minivan");
+            var alternative1 = hierarchy.AddAlternative("Accord sedan");
+            var alternative2 = hierarchy.AddAlternative("Accord Hybrid");
+            var alternative3 = hierarchy.AddAlternative("Pilot CUV");
+            var alternative4 = hierarchy.AddAlternative("CR-V SUV");
+            var alternative5 = hierarchy.AddAlternative("Element SUV");
+            var alternative6 = hierarchy.AddAlternative("Odyssey Minivan");
 
             #region Alternative node local priorities
 

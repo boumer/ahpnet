@@ -57,10 +57,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AlternativeCollectionTests.cs" />
-    <Compile Include="AlternativeNodeCollectionTests.cs" />
     <Compile Include="AlternativeNodeTests.cs" />
     <Compile Include="PairwiseComparisonTests.cs" />
-    <Compile Include="CriterionNodeCollectionTests.cs" />
     <Compile Include="CriterionNodeTests.cs" />
     <Compile Include="GoalNodeTests.cs" />
     <Compile Include="HierarchyProcessorTests.cs" />

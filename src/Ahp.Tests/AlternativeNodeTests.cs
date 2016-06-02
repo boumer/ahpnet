@@ -72,7 +72,7 @@ namespace Ahp.Tests
             var alternativeNode1 = new AlternativeNode(new Alternative(), 0.791M);
             var alternativeNode2 = new AlternativeNode(new Alternative(), 0.673M);
             var criterion = new CriterionNode("Criterion", 0.374M);
-            criterion.AlternativeNodes.Add(alternativeNode2);
+            criterion.AddAlternativeNode(alternativeNode2);
 
             //Assert
             Assert.AreEqual(0.791M, alternativeNode1.GlobalPriority);

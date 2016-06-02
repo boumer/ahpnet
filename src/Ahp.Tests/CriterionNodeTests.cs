@@ -16,8 +16,8 @@ namespace Ahp.Tests
         {
             //Arrange => Act
             var criterion1 = new CriterionNode("Criterion1", 0.153M);
-            var criterion11 = criterion1.SubcriterionNodes.Add("Criterion11", 0.345M);
-            var criterion111 = criterion11.SubcriterionNodes.Add("Criterion111", 0.876M);
+            var criterion11 = criterion1.AddSubcriterionNode("Criterion11", 0.345M);
+            var criterion111 = criterion11.AddSubcriterionNode("Criterion111", 0.876M);
 
             //Assert
             Assert.AreEqual(0.153M, criterion1.GlobalPriority);
@@ -132,16 +132,16 @@ namespace Ahp.Tests
         {
             //Arrange
             var criterion = new CriterionNode();
-            criterion.AlternativeNodes.Add(new AlternativeNode(new Alternative("Alternative1")));
-            criterion.AlternativeNodes.Add(new AlternativeNode(new Alternative("Alternative2")));
+            criterion.AddAlternativeNode(new AlternativeNode(new Alternative("Alternative1")));
+            criterion.AddAlternativeNode(new AlternativeNode(new Alternative("Alternative2")));
             var subcriterion = new CriterionNode();
 
             //Act
-            criterion.SubcriterionNodes.Add(subcriterion);
+            criterion.AddSubcriterionNode(subcriterion);
 
             //Assert
             Assert.AreEqual(criterion, subcriterion.ParentCriterionNode);
-            Assert.AreEqual(0, criterion.AlternativeNodes.Count);
+            Assert.AreEqual(0, criterion.AlternativeNodes.Count());
         }
 
         [TestMethod]
@@ -152,29 +152,11 @@ namespace Ahp.Tests
             var subcriterion = new CriterionNode();
             
             //Act
-            criterion.SubcriterionNodes.Add(subcriterion);
-            criterion.SubcriterionNodes.Remove(subcriterion);
+            criterion.AddSubcriterionNode(subcriterion);
+            criterion.RemoveSubcriterionNode(subcriterion);
 
             //Assert
             Assert.IsNull(subcriterion.ParentCriterionNode);
-        }
-
-        [TestMethod]
-        public void CriterionNode_SubcriterionNodesClear_ClearsWithWixUp()
-        {
-            //Arrange
-            var criterion = new CriterionNode("Criterion");
-            var subcriterion1 = new CriterionNode("Subcriterion1");
-            var subcriterion2 = new CriterionNode("Subcriterion2");
-            criterion.SubcriterionNodes.Add(subcriterion1);
-            criterion.SubcriterionNodes.Add(subcriterion2);
-
-            //Act
-            criterion.SubcriterionNodes.Clear();
-
-            //Assert
-            Assert.IsNull(subcriterion1.ParentCriterionNode);
-            Assert.IsNull(subcriterion2.ParentCriterionNode);
         }
 
         [TestMethod]
@@ -182,16 +164,16 @@ namespace Ahp.Tests
         {
             //Arrange
             var criterion = new CriterionNode("Criterion");
-            criterion.SubcriterionNodes.Add(new CriterionNode("Subcriterion1"));
-            criterion.SubcriterionNodes.Add(new CriterionNode("Subcriterion2"));
+            criterion.AddSubcriterionNode(new CriterionNode("Subcriterion1"));
+            criterion.AddSubcriterionNode(new CriterionNode("Subcriterion2"));
             var alternativeNode = new AlternativeNode(new Alternative("Alternative"));
 
             //Act
-            criterion.AlternativeNodes.Add(alternativeNode);
+            criterion.AddAlternativeNode(alternativeNode);
 
             //Assert
             Assert.AreEqual(criterion, alternativeNode.CriterionNode);
-            Assert.AreEqual(0, criterion.SubcriterionNodes.Count);
+            Assert.AreEqual(0, criterion.SubcriterionNodes.Count());
         }
 
         [TestMethod]
@@ -200,32 +182,14 @@ namespace Ahp.Tests
             //Arrange
             var criterion = new CriterionNode();
             var alternativeNode = new AlternativeNode(new Alternative());
-            criterion.AlternativeNodes.Add(alternativeNode);
+            criterion.AddAlternativeNode(alternativeNode);
 
             //Act
-            criterion.AlternativeNodes.Remove(alternativeNode);
+            criterion.RemoveAlternativeNode(alternativeNode);
 
             //Assert
             Assert.IsNull(alternativeNode.CriterionNode);
-        }
-
-        [TestMethod]
-        public void CriterionNode_AlternativeNodesClear_ClearsWithWixUp()
-        {
-            //Arrange
-            var criterion = new CriterionNode("Criterion");
-            var alternativeNode1 = new AlternativeNode(new Alternative("Alternative1"));
-            var alternativeNode2 = new AlternativeNode(new Alternative("Alternative2"));
-            criterion.AlternativeNodes.Add(alternativeNode1);
-            criterion.AlternativeNodes.Add(alternativeNode2);
-
-            //Act
-            criterion.AlternativeNodes.Clear();
-
-            //Assert
-            Assert.IsNull(alternativeNode1.CriterionNode);
-            Assert.IsNull(alternativeNode2.CriterionNode);
-        }
+        }       
 
         [TestMethod]
         public void CriterionNode_HasSubcriterionNodes_WithoutNodes_ReturnsFalse()
@@ -242,7 +206,7 @@ namespace Ahp.Tests
         {
             //Arrange => Act
             var criterion = new CriterionNode();
-            criterion.SubcriterionNodes.Add("Subcriterion");
+            criterion.AddSubcriterionNode("Subcriterion");
 
             //Assert
             Assert.IsTrue(criterion.HasSubcriterionNodes);
@@ -263,7 +227,7 @@ namespace Ahp.Tests
         {
             //Arrange => Act
             var criterion = new CriterionNode();
-            criterion.AlternativeNodes.Add(new AlternativeNode(new Alternative("Subcriterion")));
+            criterion.AddAlternativeNode(new AlternativeNode(new Alternative("Subcriterion")));
 
             //Assert
             Assert.IsTrue(criterion.HasAlternativeNodes);

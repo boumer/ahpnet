@@ -16,15 +16,20 @@ namespace Ahp
 
         public CriterionNode(string name, decimal localPriority)
             : base(name, localPriority)
-        {
-            _subcriterionNodes = new CriterionNodeCollection(HandleChildCriterionAdded, HandleChildCriterionRemoved);
-            _alternativeNodes = new AlternativeNodeCollection(HandleAlternativeAdded, HandleAlternativeRemoved);
-        }
+        { }
 
         public GoalNode GoalNode
         {
             get { return ParentNode as GoalNode; }
-            set { ParentNode = value; }
+            set
+            {
+                if (value == null && !(ParentNode is GoalNode))
+                {
+                    return;
+                }
+
+                ParentNode = value;
+            }
         }
 
         public CriterionNode ParentCriterionNode
@@ -32,81 +37,122 @@ namespace Ahp
             get { return ParentNode as CriterionNode; }
             set
             {
-                if (ParentCriterionNode != null)
+                if (value == null && !(ParentNode is CriterionNode))
                 {
-                    ParentCriterionNode.SubcriterionNodes.Remove(this);
+                    return;
                 }
 
                 ParentNode = value;
+            }
+        }
 
-                if (value != null)
+        public IEnumerable<CriterionNode> SubcriterionNodes
+        {
+            get
+            {
+                foreach (var node in ChildNodes)
                 {
-                    if (!value.SubcriterionNodes.Contains(this))
+                    var subcriterionNode = node as CriterionNode;
+                    if (subcriterionNode != null)
                     {
-                        value.SubcriterionNodes.Add(this);
-                    }                    
+                        yield return subcriterionNode;
+                    }
                 }
             }
         }
 
-        private CriterionNodeCollection _subcriterionNodes;
-        public CriterionNodeCollection SubcriterionNodes
+        public IEnumerable<AlternativeNode> AlternativeNodes
         {
-            get { return _subcriterionNodes; }
-        }
-
-        private AlternativeNodeCollection _alternativeNodes;
-        public AlternativeNodeCollection AlternativeNodes
-        {
-            get { return _alternativeNodes; }
+            get
+            {
+                foreach (var node in ChildNodes)
+                {
+                    var alternativeNode = node as AlternativeNode;
+                    if (alternativeNode != null)
+                    {
+                        yield return alternativeNode;
+                    }
+                }
+            }
         }
 
         public bool HasSubcriterionNodes
         {
-            get { return _subcriterionNodes.Count > 0; }
+            get { return SubcriterionNodes.GetEnumerator().MoveNext(); }
         }
 
         public bool HasAlternativeNodes
         {
-            get { return _alternativeNodes.Count > 0; }
+            get { return AlternativeNodes.GetEnumerator().MoveNext(); }
         }
 
-        #region Bidirectional associations fixup
-
-        private void HandleChildCriterionAdded(CriterionNode node)
+        public CriterionNode AddSubcriterionNode(string name)
         {
-            if (!object.ReferenceEquals(node.ParentCriterionNode, this))
-            {
-                node.ParentCriterionNode = this;
-            }
-            this.AlternativeNodes.Clear();
+            return AddSubcriterionNode(name, 0M);
         }
 
-        private void HandleChildCriterionRemoved(CriterionNode node)
+        public CriterionNode AddSubcriterionNode(string name, decimal weight)
         {
-            if (object.ReferenceEquals(node.ParentCriterionNode, this))
-            {
-                node.ParentCriterionNode = null;
-            }
+            var node = new CriterionNode(name, weight);
+            AddSubcriterionNode(node);
+
+            return node;
         }
 
-        private void HandleAlternativeAdded(AlternativeNode node)
+        public void AddSubcriterionNode(CriterionNode node)
         {
-            if (!object.ReferenceEquals(node.CriterionNode, this))
+            if (HasAlternativeNodes)
             {
-                node.CriterionNode = this;
+                ChildNodes.Clear();
             }
-            this.SubcriterionNodes.Clear();
+
+            ChildNodes.Add(node);
         }
 
-        private void HandleAlternativeRemoved(AlternativeNode node)
+        public void RemoveSubcriterionNode(CriterionNode node)
         {
-            if (object.ReferenceEquals(node.CriterionNode, this))
-            {
-                node.CriterionNode = null;
-            }
+            ChildNodes.Remove(node);
         }
 
-        #endregion
+        public AlternativeNode GetAlternativeNode(Alternative alternative)
+        {
+            foreach (var alternativeNode in AlternativeNodes)
+            {
+                if (alternativeNode.Alternative == alternative)
+                {
+                    return alternativeNode;
+                }
+            }
+
+            return null;
+        }
+
+        public void AddAlternativeNode(AlternativeNode node)
+        {
+            if (HasSubcriterionNodes)
+            {
+                ChildNodes.Clear();
+            }
+
+            ChildNodes.Add(node);
+        }
+
+        public bool ContainsAlternativeNode(Alternative alternative)
+        {
+            foreach (var alternativeNode in AlternativeNodes)
+            {
+                if (alternativeNode.Alternative == alternative)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void RemoveAlternativeNode(AlternativeNode node)
+        {
+            ChildNodes.Remove(node);
+        }
     }
 }

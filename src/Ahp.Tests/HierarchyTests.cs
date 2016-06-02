@@ -31,7 +31,7 @@ namespace Ahp.Tests
             //Arrange
             var hierarchy = new Hierarchy();
             hierarchy.GoalNode.AddCriterionNode(new CriterionNode("Criterion1"));
-            hierarchy.GoalNode.CriterionNodes.ElementAt(0).SubcriterionNodes.Add(new CriterionNode("Criterion11"));
+            hierarchy.GoalNode.CriterionNodes.ElementAt(0).AddSubcriterionNode(new CriterionNode("Criterion11"));
             hierarchy.GoalNode.AddCriterionNode(new CriterionNode("Criterion2"));
             hierarchy.GoalNode.AddCriterionNode(new CriterionNode("Criterion3"));
 
@@ -40,16 +40,16 @@ namespace Ahp.Tests
             var alternative3 = new Alternative("Alternative3");
 
             //Act
-            hierarchy.Alternatives.Add(alternative1);
-            hierarchy.Alternatives.Add(alternative2);
-            hierarchy.Alternatives.Add(alternative3);
+            hierarchy.AddAlternative(alternative1);
+            hierarchy.AddAlternative(alternative2);
+            hierarchy.AddAlternative(alternative3);
 
             //Assert
-            foreach (CriterionNode criterion in hierarchy.GetLowestCriterionNodes())
+            foreach (var criterion in hierarchy.GetLowestCriterionNodes())
             {
-                Assert.IsNotNull(criterion.AlternativeNodes[alternative1]);
-                Assert.IsNotNull(criterion.AlternativeNodes[alternative2]);
-                Assert.IsNotNull(criterion.AlternativeNodes[alternative3]);
+                Assert.IsNotNull(criterion.GetAlternativeNode(alternative1));
+                Assert.IsNotNull(criterion.GetAlternativeNode(alternative2));
+                Assert.IsNotNull(criterion.GetAlternativeNode(alternative3));
             }
         }
 
@@ -61,48 +61,22 @@ namespace Ahp.Tests
             hierarchy.GoalNode.AddCriterionNode(new CriterionNode("Criterion1"));
             hierarchy.GoalNode.AddCriterionNode(new CriterionNode("Criterion2"));
             hierarchy.GoalNode.AddCriterionNode(new CriterionNode("Criterion3"));
-            hierarchy.GoalNode.CriterionNodes.ElementAt(0).SubcriterionNodes.Add(new CriterionNode("Criterion11"));
+            hierarchy.GoalNode.CriterionNodes.ElementAt(0).AddSubcriterionNode(new CriterionNode("Criterion11"));
 
             var alternative1 = new Alternative("Alternative1");
             var alternative2 = new Alternative("Alternative2");
             var alternative3 = new Alternative("Alternative3");
 
             //Act
-            hierarchy.Alternatives.Add(alternative1);
-            hierarchy.Alternatives.Add(alternative2);
-            hierarchy.Alternatives.Add(alternative3);
-            hierarchy.Alternatives.Remove(alternative1);
+            hierarchy.AddAlternative(alternative1);
+            hierarchy.AddAlternative(alternative2);
+            hierarchy.AddAlternative(alternative3);
+            hierarchy.RemoveAlternative(alternative1);
 
             //Assert
-            foreach (CriterionNode criterion in hierarchy.GetLowestCriterionNodes())
+            foreach (var criterion in hierarchy.GetLowestCriterionNodes())
             {
-                Assert.IsNull(criterion.AlternativeNodes[alternative1]);
-            }
-        }
-
-        [TestMethod]
-        public void Hierarchy_AlternativesClear_ClearsAlternatives()
-        {
-            //Arrange
-            var hierarchy = new Hierarchy();
-            hierarchy.GoalNode.AddCriterionNode(new CriterionNode("Criterion1"));
-            hierarchy.GoalNode.AddCriterionNode(new CriterionNode("Criterion2"));
-            hierarchy.GoalNode.AddCriterionNode(new CriterionNode("Criterion3"));
-            hierarchy.GoalNode.CriterionNodes.ElementAt(0).SubcriterionNodes.Add(new CriterionNode("Criterion11"));
-
-            var alternative1 = hierarchy.Alternatives.Add("Alternative1");
-            var alternative2 = hierarchy.Alternatives.Add("Alternative2");
-            var alternative3 = hierarchy.Alternatives.Add("Alternative3");
-
-            //Act
-            hierarchy.Alternatives.Clear();
-
-            //Assert
-            foreach (CriterionNode criterion in hierarchy.GetLowestCriterionNodes())
-            {
-                Assert.IsFalse(criterion.AlternativeNodes.Contains(alternative1));
-                Assert.IsFalse(criterion.AlternativeNodes.Contains(alternative2));
-                Assert.IsFalse(criterion.AlternativeNodes.Contains(alternative3));
+                Assert.IsNull(criterion.GetAlternativeNode(alternative1));
             }
         }
 
@@ -117,7 +91,7 @@ namespace Ahp.Tests
             //Act
             try
             {
-                AlternativeNode alternativeNode = hierarchy[new Alternative("WrongKey"), criterion];
+                var alternativeNode = hierarchy[new Alternative("WrongKey"), criterion];
             }
             catch (Exception e)
             {
@@ -135,7 +109,7 @@ namespace Ahp.Tests
         {
             //Arrange
             var hierarchy = new Hierarchy();
-            var alternative = hierarchy.Alternatives.Add("Alternative");
+            var alternative = hierarchy.AddAlternative("Alternative");
             Exception exception = null;
 
             //Act
@@ -159,12 +133,12 @@ namespace Ahp.Tests
         {
             //Arrange => Act
             var hierarchy = new Hierarchy();
-            var alternative1 = hierarchy.Alternatives.Add("Alternative1");
-            var alternative2 = hierarchy.Alternatives.Add("Alternative2");
+            var alternative1 = hierarchy.AddAlternative("Alternative1");
+            var alternative2 = hierarchy.AddAlternative("Alternative2");
 
             var criterion1 = hierarchy.GoalNode.AddCriterionNode("Criterion1");
             var criterion2 = hierarchy.GoalNode.AddCriterionNode("Criterion2");
-            var criterion11 = hierarchy.GoalNode.CriterionNodes.ElementAt(0).SubcriterionNodes.Add("Criterion11");
+            var criterion11 = hierarchy.GoalNode.CriterionNodes.ElementAt(0).AddSubcriterionNode("Criterion11");
 
             //Assert
             Assert.AreEqual(hierarchy[alternative1, criterion2].Alternative, alternative1);
@@ -185,28 +159,28 @@ namespace Ahp.Tests
         {
             //Arrange
             var hierarchy = new Hierarchy();
-            var alternative1 = hierarchy.Alternatives.Add("Alternative1");
-            var alternative2 = hierarchy.Alternatives.Add("Alternative2");
-            var alternative3 = hierarchy.Alternatives.Add("Alternative3");
+            var alternative1 = hierarchy.AddAlternative("Alternative1");
+            var alternative2 = hierarchy.AddAlternative("Alternative2");
+            var alternative3 = hierarchy.AddAlternative("Alternative3");
 
             hierarchy.GoalNode.AddCriterionNode(new CriterionNode("Criterion1"));
             hierarchy.GoalNode.AddCriterionNode(new CriterionNode("Criterion2"));
             hierarchy.GoalNode.AddCriterionNode(new CriterionNode("Criterion3"));
 
             var alternative4 = new Alternative("Alternative4");
-            var criterion11 = hierarchy.GoalNode.CriterionNodes.ElementAt(0).SubcriterionNodes.Add("Criterion11");
-            criterion11.AlternativeNodes.Add(new AlternativeNode(alternative4));
-
+            var criterion11 = hierarchy.GoalNode.CriterionNodes.ElementAt(0).AddSubcriterionNode("Criterion11");
+            criterion11.AddAlternativeNode(new AlternativeNode(alternative4));
+            
             //Act
             hierarchy.RefreshAlternativeNodes();
 
             //Assert
             foreach (var criterion in hierarchy.GetLowestCriterionNodes())
             {
-                Assert.IsTrue(criterion.AlternativeNodes.Contains(alternative1));
-                Assert.IsTrue(criterion.AlternativeNodes.Contains(alternative2));
-                Assert.IsTrue(criterion.AlternativeNodes.Contains(alternative3));
-                Assert.IsFalse(criterion.AlternativeNodes.Contains(alternative4));
+                Assert.IsTrue(criterion.ContainsAlternativeNode(alternative1));
+                Assert.IsTrue(criterion.ContainsAlternativeNode(alternative2));
+                Assert.IsTrue(criterion.ContainsAlternativeNode(alternative3));
+                Assert.IsFalse(criterion.ContainsAlternativeNode(alternative4));
             }
         }
 
@@ -216,13 +190,13 @@ namespace Ahp.Tests
             //Arrange
             var hierarchy = new Hierarchy();
             var criterion1 = hierarchy.GoalNode.AddCriterionNode("Criterion1");
-            var criterion11 = criterion1.SubcriterionNodes.Add("Criterion11");
-            var criterion111 = criterion11.SubcriterionNodes.Add("Criterion111");
-            var criterion112 = criterion11.SubcriterionNodes.Add("Criterion112");
-            var criterion12 = criterion1.SubcriterionNodes.Add("Criterion12");
-            var criterion121 = criterion12.SubcriterionNodes.Add("Criterion121");
+            var criterion11 = criterion1.AddSubcriterionNode("Criterion11");
+            var criterion111 = criterion11.AddSubcriterionNode("Criterion111");
+            var criterion112 = criterion11.AddSubcriterionNode("Criterion112");
+            var criterion12 = criterion1.AddSubcriterionNode("Criterion12");
+            var criterion121 = criterion12.AddSubcriterionNode("Criterion121");
             var criterion2 = hierarchy.GoalNode.AddCriterionNode("Criterion2");
-            var criterion21 = criterion2.SubcriterionNodes.Add("Criterion21");
+            var criterion21 = criterion2.AddSubcriterionNode("Criterion21");
             var criterion3 = hierarchy.GoalNode.AddCriterionNode("Criterion3");
 
             //Act

@@ -13,7 +13,7 @@ namespace Ahp
         public Hierarchy(string goalName)
         {
             _goalNode = new GoalNode(goalName);
-            _alternatives = new AlternativeCollection(HandleAlternativeAdded, HandleAlternativeRemoved);
+            _alternatives = new List<Alternative>();
         }
 
         private GoalNode _goalNode;
@@ -22,8 +22,8 @@ namespace Ahp
             get { return _goalNode; }
         }
 
-        private AlternativeCollection _alternatives;
-        public AlternativeCollection Alternatives
+        private List<Alternative> _alternatives;
+        public IEnumerable<Alternative> Alternatives
         {
             get { return _alternatives; }
         }
@@ -32,7 +32,7 @@ namespace Ahp
         {
             get
             {
-                if (!Alternatives.Contains(alternative))
+                if (!_alternatives.Contains(alternative))
                 {
                     throw new KeyNotFoundException(String.Format("Alternative '{0}' not found in the Altenatives collection of the hierarchy", alternative.Name));
                 }
@@ -62,31 +62,42 @@ namespace Ahp
             }
         }
 
-        public void RefreshAlternativeNodes()
+        public Alternative AddAlternative(string name)
         {
-            foreach (var criterionNode in GetLowestCriterionNodes())
+            return AddAlternative(Guid.NewGuid().ToString(), name);
+        }
+
+        public Alternative AddAlternative(string id, string name)
+        {
+            var alternative = new Alternative(id, name);
+            AddAlternative(alternative);
+
+            return alternative;
+        }
+
+        public void AddAlternative(Alternative alternative)
+        {
+            if (_alternatives.Contains(alternative))
             {
-                foreach (var alternative in Alternatives)
-                {
-                    if (!criterionNode.AlternativeNodes.Contains(alternative))
-                    {
-                        criterionNode.AlternativeNodes.Add(new AlternativeNode(alternative));
-                    }
-                }
+                throw new ArgumentException("Same alternative can not be added twice.");
+            }
 
-                var toBeRemoved = new AlternativeNodeCollection();
-                foreach (var alternativeNode in criterionNode.AlternativeNodes)
-                {
-                    if (!this.Alternatives.Contains(alternativeNode.Alternative))
-                    {
-                        toBeRemoved.Add(alternativeNode);
-                    }
-                }
+            _alternatives.Add(alternative);
 
-                foreach (var alternativeNode in toBeRemoved)
-                {
-                    criterionNode.AlternativeNodes.Remove(alternativeNode);
-                }
+            foreach (var lowestCriterionNode in GetLowestCriterionNodes())
+            {
+                lowestCriterionNode.AddAlternativeNode(new AlternativeNode(alternative));
+            }
+        }
+
+        public void RemoveAlternative(Alternative alternative)
+        {
+            _alternatives.Remove(alternative);
+
+            foreach (var lowestCriterionNode in GetLowestCriterionNodes())
+            {
+                var toBeDeleted = lowestCriterionNode.GetAlternativeNode(alternative);
+                lowestCriterionNode.RemoveAlternativeNode(toBeDeleted);
             }
         }
 
@@ -117,20 +128,31 @@ namespace Ahp
             }
         }
 
-        private void HandleAlternativeAdded(Alternative alternative)
+        public void RefreshAlternativeNodes()
         {
-            foreach (var lowestCriterionNode in GetLowestCriterionNodes())
+            foreach (var criterionNode in GetLowestCriterionNodes())
             {
-                lowestCriterionNode.AlternativeNodes.Add(new AlternativeNode(alternative));
-            }
-        }
+                foreach (var alternative in Alternatives)
+                {
+                    if (!criterionNode.ContainsAlternativeNode(alternative))
+                    {
+                        criterionNode.AddAlternativeNode(new AlternativeNode(alternative));
+                    }
+                }
 
-        private void HandleAlternativeRemoved(Alternative alternative)
-        {
-            foreach (var lowestCriterionNode in GetLowestCriterionNodes())
-            {
-                var toBeDeleted = lowestCriterionNode.AlternativeNodes[alternative];
-                lowestCriterionNode.AlternativeNodes.Remove(toBeDeleted);
+                var toBeRemoved = new List<AlternativeNode>();
+                foreach (var alternativeNode in criterionNode.AlternativeNodes)
+                {
+                    if (!_alternatives.Contains(alternativeNode.Alternative))
+                    {
+                        toBeRemoved.Add(alternativeNode);
+                    }
+                }
+
+                foreach (var alternativeNode in toBeRemoved)
+                {
+                    criterionNode.RemoveAlternativeNode(alternativeNode);
+                }
             }
         }
     }

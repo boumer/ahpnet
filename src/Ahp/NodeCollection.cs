@@ -5,23 +5,23 @@ using System.Text;
 
 namespace Ahp
 {
-    public delegate void NotificationCollectionCallback<T>(T item);
+    public delegate void NodeCollectionCallback<T>(T item);
 
-    public class NotificationCollection<T> : IList<T>
+    public class NodeCollection<T> : IList<T>
     {
         private List<T> _list = new List<T>();
 
-        private NotificationCollectionCallback<T> _itemAddedCallback;
-        private NotificationCollectionCallback<T> _itemRemovedCallback;
+        private NodeCollectionCallback<T> _nodeAddedCallback;
+        private NodeCollectionCallback<T> _nodeRemovedCallback;
 
-        public NotificationCollection()
+        public NodeCollection()
             : this(null, null)
         { }
 
-        public NotificationCollection(NotificationCollectionCallback<T> itemAddedCallback, NotificationCollectionCallback<T> itemRemovedCallback)
+        public NodeCollection(NodeCollectionCallback<T> nodeAddedCallback, NodeCollectionCallback<T> nodeRemovedCallback)
         {
-            _itemAddedCallback = itemAddedCallback;
-            _itemRemovedCallback = itemRemovedCallback;
+            _nodeAddedCallback = nodeAddedCallback;
+            _nodeRemovedCallback = nodeRemovedCallback;
         }
 
         public T this[int index]
@@ -45,9 +45,9 @@ namespace Ahp
             ValidateBeforeAdd(item);
 
             _list.Add(item);
-            if (_itemAddedCallback != null)
+            if (_nodeAddedCallback != null)
             {
-                _itemAddedCallback(item);
+                _nodeAddedCallback(item);
             }
         }
 
@@ -84,9 +84,9 @@ namespace Ahp
             ValidateBeforeAdd(item);
 
             _list.Insert(index, item);
-            if (_itemAddedCallback != null)
+            if (_nodeAddedCallback != null)
             {
-                _itemAddedCallback(item);
+                _nodeAddedCallback(item);
             }
         }
 
@@ -95,9 +95,9 @@ namespace Ahp
             var removed = _list.Remove(item);
             if (removed)
             {
-                if (_itemRemovedCallback != null)
+                if (_nodeRemovedCallback != null)
                 {
-                    _itemRemovedCallback(item);
+                    _nodeRemovedCallback(item);
                 }
             }
 
@@ -119,7 +119,13 @@ namespace Ahp
         {
             if (Contains(item))
             {
-                throw new ArgumentException("Same item can not be added twice.");
+                throw new ArgumentException("Same node can not be added twice.");
+            }
+
+            if (_list.Count > 0 && 
+                _list[0].GetType() != item.GetType())
+            {
+                throw new ArgumentException("Only nodes of the same type can be added.");
             }
         }
     }

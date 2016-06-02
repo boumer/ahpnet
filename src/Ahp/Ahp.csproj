@@ -63,17 +63,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Alternative.cs" />
-    <Compile Include="AlternativeCollection.cs" />
     <Compile Include="AlternativeNode.cs" />
-    <Compile Include="AlternativeNodeCollection.cs" />
     <Compile Include="AnalysisResult.cs" />
     <Compile Include="CriterionNode.cs" />
-    <Compile Include="CriterionNodeCollection.cs" />
     <Compile Include="GoalNode.cs" />
     <Compile Include="Hierarchy.cs" />
     <Compile Include="HierarchyProcessor.cs" />
     <Compile Include="Node.cs" />
-    <Compile Include="NotificationCollection.cs" />
+    <Compile Include="NodeCollection.cs" />
     <Compile Include="PairwiseComparison.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

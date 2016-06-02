@@ -19,7 +19,7 @@ namespace Ahp
             _name = name;
             _localPriority = localPriority;
 
-            _childNodes = new NotificationCollection<Node>(HandleChildAdded, HandleChildRemoved);
+            _childNodes = new NodeCollection<Node>(HandleChildAdded, HandleChildRemoved);
         }
 
         private string _name;
@@ -79,8 +79,8 @@ namespace Ahp
             }
         }
 
-        private NotificationCollection<Node> _childNodes;
-        protected NotificationCollection<Node> ChildNodes
+        private NodeCollection<Node> _childNodes;
+        protected NodeCollection<Node> ChildNodes
         {
             get { return _childNodes; }
         }

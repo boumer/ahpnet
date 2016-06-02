@@ -36,20 +36,7 @@ namespace Ahp
         public CriterionNode CriterionNode
         {
             get { return ParentNode as CriterionNode; }
-            set
-            {
-                if (CriterionNode != null)
-                {
-                    CriterionNode.AlternativeNodes.Remove(this);
-                }
-
-                ParentNode = value;
-
-                if (value != null && !value.AlternativeNodes.Contains(this))
-                {
-                    value.AlternativeNodes.Add(this);
-                }                
-            }
+            set { ParentNode = value; }
         }
     }
 }

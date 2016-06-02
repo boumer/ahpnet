@@ -20,7 +20,7 @@ namespace AhpDemo.Models
 
         public void AddAlternative(string name)
         {
-            Hierarchy.Alternatives.Add(name);
+            Hierarchy.AddAlternative(name);
             OnHierarchyChanged();
         }
 
