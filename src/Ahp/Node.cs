@@ -20,7 +20,8 @@ namespace Ahp
             _name = name;
             _localPriority = localPriority;
 
-            _childNodes = new NodeCollection<Node>(HandleChildAdded, HandleChildRemoved);
+            _childNodes = new List<Node>();
+            _childNodesReadOnly = new ReadOnlyNodeCollection(_childNodes);
         }
 
         private string _name;
@@ -63,9 +64,9 @@ namespace Ahp
                     return;
                 }
 
-                if (_parentNode != null)
+                if (_parentNode != null && _parentNode.ChildNodes.Contains(this))
                 {
-                    _parentNode.ChildNodes.Remove(this);
+                    _parentNode.RemoveChildNode(this);
                 }
 
                 _parentNode = value;
@@ -74,27 +75,59 @@ namespace Ahp
                 {
                     if (!_parentNode.ChildNodes.Contains(this))
                     {
-                        _parentNode.ChildNodes.Add(this);
+                        _parentNode.AddChildNode(this);
                     }
                 }
             }
         }
 
-        private NodeCollection<Node> _childNodes;
-        protected NodeCollection<Node> ChildNodes
+        private List<Node> _childNodes;
+        private ReadOnlyNodeCollection _childNodesReadOnly;
+        protected ReadOnlyNodeCollection ChildNodes
         {
-            get { return _childNodes; }
+            get { return _childNodesReadOnly; }
         }
 
-        public ICollection<T> SearchNodes<T>(Func<T, bool> condition) where T : Node
+        protected void AddChildNode(Node node)
+        {
+            if (_childNodes.Contains(node))
+            {
+                throw new ArgumentException("Same node can not be added twice.");
+            }
+
+            if (_childNodes.Count > 0 &&
+                _childNodes[0].GetType() != node.GetType())
+            {
+                throw new ArgumentException("Only nodes of the same type can be added.");
+            }
+
+            _childNodes.Add(node);
+            HandleChildAdded(node);
+        }
+
+        protected void RemoveChildNode(Node node)
+        {
+            _childNodes.Remove(node);
+            HandleChildRemoved(node);
+        }
+
+        protected void ClearChildNodes()
+        {
+            while (_childNodes.Count > 0)
+            {
+                RemoveChildNode(_childNodes[0]);
+            }
+        }
+
+        public ICollection<T> SearchChildNodes<T>(Func<T, bool> condition) where T : Node
         {
             var result = new List<T>();
-            SearchNodesRecursive(condition, ChildNodes.OfType<T>(), result);
+            SearchChildNodesRecursive(condition, ChildNodes.OfType<T>(), result);
 
             return result;
         }
 
-        private void SearchNodesRecursive<T>(Func<T, bool> condition, IEnumerable<T> nodes, ICollection<T> result) where T : Node
+        private void SearchChildNodesRecursive<T>(Func<T, bool> condition, IEnumerable<T> nodes, ICollection<T> result) where T : Node
         {
             foreach (var node in nodes)
             {
@@ -106,11 +139,11 @@ namespace Ahp
 
             foreach (var node in nodes)
             {
-                SearchNodesRecursive(condition, node.ChildNodes.OfType<T>(), result);
+                SearchChildNodesRecursive(condition, node.ChildNodes.OfType<T>(), result);
             }
         }
 
-        private void HandleChildAdded(Node node)
+        protected virtual void HandleChildAdded(Node node)
         {
             if (node.ParentNode != this)
             {
@@ -118,7 +151,7 @@ namespace Ahp
             }
         }
 
-        private void HandleChildRemoved(Node node)
+        protected virtual void HandleChildRemoved(Node node)
         {
             if (node.ParentNode == this)
             {

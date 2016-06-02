@@ -70,7 +70,7 @@
     <Compile Include="Hierarchy.cs" />
     <Compile Include="HierarchyProcessor.cs" />
     <Compile Include="Node.cs" />
-    <Compile Include="NodeCollection.cs" />
+    <Compile Include="NodeCollections.cs" />
     <Compile Include="PairwiseComparison.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

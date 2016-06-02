@@ -47,9 +47,9 @@ namespace Ahp.Tests
             //Assert
             foreach (var criterion in hierarchy.GetLowestCriterionNodes())
             {
-                Assert.IsNotNull(criterion.GetAlternativeNode(alternative1));
-                Assert.IsNotNull(criterion.GetAlternativeNode(alternative2));
-                Assert.IsNotNull(criterion.GetAlternativeNode(alternative3));
+                Assert.IsNotNull(criterion.AlternativeNodes[alternative1]);
+                Assert.IsNotNull(criterion.AlternativeNodes[alternative2]);
+                Assert.IsNotNull(criterion.AlternativeNodes[alternative3]);
             }
         }
 
@@ -76,7 +76,7 @@ namespace Ahp.Tests
             //Assert
             foreach (var criterion in hierarchy.GetLowestCriterionNodes())
             {
-                Assert.IsNull(criterion.GetAlternativeNode(alternative1));
+                Assert.IsFalse(criterion.AlternativeNodes.Contains(alternative1));
             }
         }
 
@@ -168,8 +168,7 @@ namespace Ahp.Tests
             hierarchy.GoalNode.AddCriterionNode(new CriterionNode("Criterion3"));
 
             var alternative4 = new Alternative("Alternative4");
-            var criterion11 = hierarchy.GoalNode.CriterionNodes.ElementAt(0).AddSubcriterionNode("Criterion11");
-            criterion11.AddAlternativeNode(new AlternativeNode(alternative4));
+            var criterion11 = hierarchy.GoalNode.CriterionNodes[0].AddSubcriterionNode("Criterion11");
             
             //Act
             hierarchy.RefreshAlternativeNodes();
@@ -177,10 +176,9 @@ namespace Ahp.Tests
             //Assert
             foreach (var criterion in hierarchy.GetLowestCriterionNodes())
             {
-                Assert.IsTrue(criterion.ContainsAlternativeNode(alternative1));
-                Assert.IsTrue(criterion.ContainsAlternativeNode(alternative2));
-                Assert.IsTrue(criterion.ContainsAlternativeNode(alternative3));
-                Assert.IsFalse(criterion.ContainsAlternativeNode(alternative4));
+                Assert.IsTrue(criterion.AlternativeNodes.Contains(alternative1));
+                Assert.IsTrue(criterion.AlternativeNodes.Contains(alternative2));
+                Assert.IsTrue(criterion.AlternativeNodes.Contains(alternative3));
             }
         }
 

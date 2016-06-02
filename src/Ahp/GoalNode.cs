@@ -26,6 +26,7 @@ namespace Ahp
             }
 
             Hierarchy = hierarchy;
+            _criterionNodes = new CriterionNodeCollection(ChildNodes);
         }
 
         public Hierarchy Hierarchy { get; private set; }
@@ -42,9 +43,10 @@ namespace Ahp
             set { throw new InvalidOperationException("Setting ParentNode for the GoalNode is not allowed. Its value is always null."); }
         }
 
-        public IEnumerable<CriterionNode> CriterionNodes
+        private CriterionNodeCollection _criterionNodes;
+        public CriterionNodeCollection CriterionNodes
         {
-            get { return ChildNodes.Cast<CriterionNode>(); }
+            get { return _criterionNodes; }
         }
 
         public CriterionNode AddCriterionNode(string name)
@@ -62,12 +64,13 @@ namespace Ahp
 
         public void AddCriterionNode(CriterionNode node)
         {
-            ChildNodes.Add(node);
+            AddChildNode(node);
+            node.RefreshAlternativeNodes();
         }
 
         public void RemoveCriterionNode(CriterionNode node)
         {
-            ChildNodes.Remove(node);
+            RemoveChildNode(node);
         }
     }
 }

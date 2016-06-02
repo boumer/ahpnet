@@ -29,9 +29,9 @@ namespace Ahp.Tests
 
             //Assert
             Assert.IsNotNull(exception);
-            Assert.IsInstanceOfType(exception, typeof(ArgumentException));            
+            Assert.IsInstanceOfType(exception, typeof(ArgumentException));
         }
-        
+
         [TestMethod]
         public void AlternativeNode_Name_ReturnsAlternativeName()
         {
@@ -69,14 +69,21 @@ namespace Ahp.Tests
         public void AlternativeNode_GlobalPriority_ReturnsCorrectValue()
         {
             //Arrange => Act
-            var alternativeNode1 = new AlternativeNode(new Alternative(), 0.791M);
-            var alternativeNode2 = new AlternativeNode(new Alternative(), 0.673M);
+            var alternative1 = new Alternative();
+            var alternative2 = new Alternative();
             var criterion = new CriterionNode("Criterion", 0.374M);
-            criterion.AddAlternativeNode(alternativeNode2);
+
+            var hierarchy = new Hierarchy();
+            hierarchy.AddAlternative(alternative1);
+            hierarchy.AddAlternative(alternative2);
+            hierarchy.GoalNode.AddCriterionNode(criterion);
+
+            criterion.AlternativeNodes[alternative1].LocalPriority = 0.791M;
+            criterion.AlternativeNodes[alternative2].LocalPriority = 0.673M;
 
             //Assert
-            Assert.AreEqual(0.791M, alternativeNode1.GlobalPriority);
-            Assert.AreEqual(0.673M * 0.374M, alternativeNode2.GlobalPriority);
+            Assert.AreEqual(0.791M * 0.374M, criterion.AlternativeNodes[alternative1].GlobalPriority);
+            Assert.AreEqual(0.673M * 0.374M, criterion.AlternativeNodes[alternative2].GlobalPriority);
         }
 
         [TestMethod]
@@ -117,7 +124,7 @@ namespace Ahp.Tests
         {
             //Arrange
             var alternativeNode = new AlternativeNode(new Alternative());
-            var criterion = new CriterionNode();            
+            var criterion = new CriterionNode();
 
             //Act
             alternativeNode.CriterionNode = criterion;

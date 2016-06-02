@@ -18,7 +18,10 @@ namespace Ahp
 
         public CriterionNode(string name, decimal localPriority)
             : base(name, localPriority)
-        { }
+        {
+            _subcriterionNodes = new CriterionNodeCollection(ChildNodes);
+            _alternativeNodes = new AlternativeNodeCollection(ChildNodes);
+        }
 
         public Hierarchy Hierarchy
         {
@@ -61,24 +64,16 @@ namespace Ahp
             }
         }
 
-        public IEnumerable<CriterionNode> SubcriterionNodes
+        private CriterionNodeCollection _subcriterionNodes;
+        public CriterionNodeCollection SubcriterionNodes
         {
-            get { return ChildNodes.OfType<CriterionNode>(); }
+            get { return _subcriterionNodes; }
         }
 
-        public IEnumerable<AlternativeNode> AlternativeNodes
+        private AlternativeNodeCollection _alternativeNodes;
+        public AlternativeNodeCollection AlternativeNodes
         {
-            get { return ChildNodes.OfType<AlternativeNode>(); }
-        }
-
-        public bool HasSubcriterionNodes
-        {
-            get { return SubcriterionNodes.GetEnumerator().MoveNext(); }
-        }
-
-        public bool HasAlternativeNodes
-        {
-            get { return AlternativeNodes.GetEnumerator().MoveNext(); }
+            get { return _alternativeNodes; }
         }
 
         public CriterionNode AddSubcriterionNode(string name)
@@ -96,58 +91,60 @@ namespace Ahp
 
         public void AddSubcriterionNode(CriterionNode node)
         {
-            if (HasAlternativeNodes)
+            if (AlternativeNodes.Count > 0)
             {
-                ChildNodes.Clear();
+                ClearChildNodes();
             }
 
-            ChildNodes.Add(node);
+            AddChildNode(node);
         }
 
         public void RemoveSubcriterionNode(CriterionNode node)
         {
-            ChildNodes.Remove(node);
+            RemoveChildNode(node);
         }
 
-        public AlternativeNode GetAlternativeNode(Alternative alternative)
+        public void RefreshAlternativeNodes()
         {
-            foreach (var alternativeNode in AlternativeNodes)
+            foreach (var alternative in Hierarchy.Alternatives)
             {
-                if (alternativeNode.Alternative == alternative)
+                if (!AlternativeNodes.Contains(alternative))
                 {
-                    return alternativeNode;
+                    AddAlternativeNode(new AlternativeNode(alternative));
                 }
             }
 
-            return null;
-        }
-
-        public void AddAlternativeNode(AlternativeNode node)
-        {
-            if (HasSubcriterionNodes)
+            foreach (var alternativeNode in AlternativeNodes.ToArray())
             {
-                ChildNodes.Clear();
-            }
-
-            ChildNodes.Add(node);
-        }
-
-        public bool ContainsAlternativeNode(Alternative alternative)
-        {
-            foreach (var alternativeNode in AlternativeNodes)
-            {
-                if (alternativeNode.Alternative == alternative)
+                if (!Hierarchy.Alternatives.Contains(alternativeNode.Alternative))
                 {
-                    return true;
+                    RemoveChildNode(alternativeNode);
                 }
             }
-
-            return false;
         }
 
-        public void RemoveAlternativeNode(AlternativeNode node)
+        private void AddAlternativeNode(AlternativeNode node)
         {
-            ChildNodes.Remove(node);
+            if (SubcriterionNodes.Count > 0)
+            {
+                ClearChildNodes();
+            }
+
+            AddChildNode(node);
+        }
+
+        protected override void HandleChildAdded(Node node)
+        {
+            base.HandleChildAdded(node);
+
+            if (Hierarchy != null)
+            {
+                var criterionNode = node as CriterionNode;
+                if (criterionNode != null)
+                {
+                    criterionNode.RefreshAlternativeNodes();
+                }
+            }
         }
     }
 }

@@ -72,49 +72,27 @@ namespace Ahp
 
             _alternatives.Add(alternative);
 
-            foreach (var lowestCriterionNode in GetLowestCriterionNodes())
-            {
-                lowestCriterionNode.AddAlternativeNode(new AlternativeNode(alternative));
-            }
+            RefreshAlternativeNodes();
         }
 
         public void RemoveAlternative(Alternative alternative)
         {
             _alternatives.Remove(alternative);
 
-            foreach (var lowestCriterionNode in GetLowestCriterionNodes())
-            {
-                var toBeDeleted = lowestCriterionNode.GetAlternativeNode(alternative);
-                lowestCriterionNode.RemoveAlternativeNode(toBeDeleted);
-            }
+            RefreshAlternativeNodes();
         }
 
         public void RefreshAlternativeNodes()
         {
             foreach (var criterionNode in GetLowestCriterionNodes())
             {
-                foreach (var alternative in Alternatives)
-                {
-                    if (!criterionNode.ContainsAlternativeNode(alternative))
-                    {
-                        criterionNode.AddAlternativeNode(new AlternativeNode(alternative));
-                    }
-                }
-
-                var alternativeNodes = new List<AlternativeNode>(criterionNode.AlternativeNodes);
-                foreach (var alternativeNode in alternativeNodes)
-                {
-                    if (!_alternatives.Contains(alternativeNode.Alternative))
-                    {
-                        criterionNode.RemoveAlternativeNode(alternativeNode);
-                    }
-                }
+                criterionNode.RefreshAlternativeNodes();
             }
         }
 
         public ICollection<CriterionNode> GetLowestCriterionNodes()
         {
-            return GoalNode.SearchNodes<CriterionNode>((node) => !node.HasSubcriterionNodes);
+            return GoalNode.SearchChildNodes<CriterionNode>((node) => node.SubcriterionNodes.Count == 0);
         }
     }
 }

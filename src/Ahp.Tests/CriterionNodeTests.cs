@@ -132,9 +132,11 @@ namespace Ahp.Tests
         public void CriterionNode_SubcriterionNodes_Add_AddsWithFixUp()
         {
             //Arrange
-            var criterion = new CriterionNode();
-            criterion.AddAlternativeNode(new AlternativeNode(new Alternative("Alternative1")));
-            criterion.AddAlternativeNode(new AlternativeNode(new Alternative("Alternative2")));
+            var hierarchy = new Hierarchy();
+            hierarchy.AddAlternative(new Alternative("Alternative1"));
+            hierarchy.AddAlternative(new Alternative("Alternative2"));
+
+            var criterion = hierarchy.GoalNode.AddCriterionNode("Criterion");
             var subcriterion = new CriterionNode();
 
             //Act
@@ -142,7 +144,7 @@ namespace Ahp.Tests
 
             //Assert
             Assert.AreEqual(criterion, subcriterion.ParentCriterionNode);
-            Assert.AreEqual(0, criterion.AlternativeNodes.Count());
+            Assert.AreEqual(0, criterion.AlternativeNodes.Count);
         }
 
         [TestMethod]
@@ -161,77 +163,46 @@ namespace Ahp.Tests
         }
 
         [TestMethod]
-        public void CriterionNode_AlternativeNodesAdd_AddsWithWixUp()
-        {
-            //Arrange
-            var criterion = new CriterionNode("Criterion");
-            criterion.AddSubcriterionNode(new CriterionNode("Subcriterion1"));
-            criterion.AddSubcriterionNode(new CriterionNode("Subcriterion2"));
-            var alternativeNode = new AlternativeNode(new Alternative("Alternative"));
-
-            //Act
-            criterion.AddAlternativeNode(alternativeNode);
-
-            //Assert
-            Assert.AreEqual(criterion, alternativeNode.CriterionNode);
-            Assert.AreEqual(0, criterion.SubcriterionNodes.Count());
-        }
-
-        [TestMethod]
-        public void CriterionNode_AlternativeNodesRemove_RemovesWithWixUp()
-        {
-            //Arrange
-            var criterion = new CriterionNode();
-            var alternativeNode = new AlternativeNode(new Alternative());
-            criterion.AddAlternativeNode(alternativeNode);
-
-            //Act
-            criterion.RemoveAlternativeNode(alternativeNode);
-
-            //Assert
-            Assert.IsNull(alternativeNode.CriterionNode);
-        }
-
-        [TestMethod]
-        public void CriterionNode_HasSubcriterionNodes_WithoutNodes_ReturnsFalse()
+        public void CriterionNode_SubcriterionNodesCount_WithoutNodes_Returns0()
         {
             //Arrange => Act
             var criterion = new CriterionNode();
 
             //Assert
-            Assert.IsFalse(criterion.HasSubcriterionNodes);
+            Assert.AreEqual(0, criterion.SubcriterionNodes.Count);
         }
 
         [TestMethod]
-        public void CriterionNode_HasSubcriterionNodes_WithNodes_ReturnsTrue()
+        public void CriterionNode_SubcriterionNodesCount_WithNodes_Returns1()
         {
             //Arrange => Act
             var criterion = new CriterionNode();
             criterion.AddSubcriterionNode("Subcriterion");
 
             //Assert
-            Assert.IsTrue(criterion.HasSubcriterionNodes);
+            Assert.AreEqual(1, criterion.SubcriterionNodes.Count);
         }
 
         [TestMethod]
-        public void CriterionNode_HasAlternativeNodes_WithoutNodes_ReturnsFalse()
+        public void CriterionNode_AlternativeNodesCount_WithoutNodes_Returns0()
         {
             //Arrange => Act
             var criterion = new CriterionNode();
 
             //Assert
-            Assert.IsFalse(criterion.HasAlternativeNodes);
+            Assert.AreEqual(0, criterion.AlternativeNodes.Count);
         }
 
         [TestMethod]
-        public void CriterionNode_HasAlternativeNodes_WithNodes_ReturnsTrue()
+        public void CriterionNode_AlternativeNodesCount_WithNodes_Returns1()
         {
             //Arrange => Act
-            var criterion = new CriterionNode();
-            criterion.AddAlternativeNode(new AlternativeNode(new Alternative("Subcriterion")));
+            var hierarchy = new Hierarchy();
+            hierarchy.AddAlternative(new Alternative("Alternative"));
+            var criterion = hierarchy.GoalNode.AddCriterionNode("Criterion");
 
             //Assert
-            Assert.IsTrue(criterion.HasAlternativeNodes);
+            Assert.AreEqual(1, criterion.AlternativeNodes.Count);
         }
     }
 }
