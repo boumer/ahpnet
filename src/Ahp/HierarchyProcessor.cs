@@ -18,7 +18,7 @@ namespace Ahp
             {
                 foreach (var alternative in hierarchy.Alternatives)
                 {
-                    result[alternative] += hierarchy[alternative, node].GlobalPriority;
+                    result[alternative] += node.AlternativeNodes[alternative].GlobalPriority;
                 }
             }
 

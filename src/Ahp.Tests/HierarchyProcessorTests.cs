@@ -42,61 +42,61 @@ namespace Ahp.Tests
 
             #region Alternative node local priorities
 
-            hierarchy[alternative1, purchasePriceCriterion].LocalPriority = 0.242M;
-            hierarchy[alternative2, purchasePriceCriterion].LocalPriority = 0.027M;
-            hierarchy[alternative3, purchasePriceCriterion].LocalPriority = 0.027M;
-            hierarchy[alternative4, purchasePriceCriterion].LocalPriority = 0.242M;
-            hierarchy[alternative5, purchasePriceCriterion].LocalPriority = 0.362M;
-            hierarchy[alternative6, purchasePriceCriterion].LocalPriority = 0.100M;
+            purchasePriceCriterion.AlternativeNodes[alternative1].LocalPriority = 0.242M;
+            purchasePriceCriterion.AlternativeNodes[alternative2].LocalPriority = 0.027M;
+            purchasePriceCriterion.AlternativeNodes[alternative3].LocalPriority = 0.027M;
+            purchasePriceCriterion.AlternativeNodes[alternative4].LocalPriority = 0.242M;
+            purchasePriceCriterion.AlternativeNodes[alternative5].LocalPriority = 0.362M;
+            purchasePriceCriterion.AlternativeNodes[alternative6].LocalPriority = 0.100M;
 
-            hierarchy[alternative1, fuelCostsCriterion].LocalPriority = 0.188M;
-            hierarchy[alternative2, fuelCostsCriterion].LocalPriority = 0.212M;
-            hierarchy[alternative3, fuelCostsCriterion].LocalPriority = 0.133M;
-            hierarchy[alternative4, fuelCostsCriterion].LocalPriority = 0.160M;
-            hierarchy[alternative5, fuelCostsCriterion].LocalPriority = 0.151M;
-            hierarchy[alternative6, fuelCostsCriterion].LocalPriority = 0.156M;
+            fuelCostsCriterion.AlternativeNodes[alternative1].LocalPriority = 0.188M;
+            fuelCostsCriterion.AlternativeNodes[alternative2].LocalPriority = 0.212M;
+            fuelCostsCriterion.AlternativeNodes[alternative3].LocalPriority = 0.133M;
+            fuelCostsCriterion.AlternativeNodes[alternative4].LocalPriority = 0.160M;
+            fuelCostsCriterion.AlternativeNodes[alternative5].LocalPriority = 0.151M;
+            fuelCostsCriterion.AlternativeNodes[alternative6].LocalPriority = 0.156M;
 
-            hierarchy[alternative1, maintenanceCostsCriterion].LocalPriority = 0.357M;
-            hierarchy[alternative2, maintenanceCostsCriterion].LocalPriority = 0.312M;
-            hierarchy[alternative3, maintenanceCostsCriterion].LocalPriority = 0.084M;
-            hierarchy[alternative4, maintenanceCostsCriterion].LocalPriority = 0.100M;
-            hierarchy[alternative5, maintenanceCostsCriterion].LocalPriority = 0.089M;
-            hierarchy[alternative6, maintenanceCostsCriterion].LocalPriority = 0.058M;
+            maintenanceCostsCriterion.AlternativeNodes[alternative1].LocalPriority = 0.357M;
+            maintenanceCostsCriterion.AlternativeNodes[alternative2].LocalPriority = 0.312M;
+            maintenanceCostsCriterion.AlternativeNodes[alternative3].LocalPriority = 0.084M;
+            maintenanceCostsCriterion.AlternativeNodes[alternative4].LocalPriority = 0.100M;
+            maintenanceCostsCriterion.AlternativeNodes[alternative5].LocalPriority = 0.089M;
+            maintenanceCostsCriterion.AlternativeNodes[alternative6].LocalPriority = 0.058M;
 
-            hierarchy[alternative1, resaleValueCriterion].LocalPriority = 0.225M;
-            hierarchy[alternative2, resaleValueCriterion].LocalPriority = 0.095M;
-            hierarchy[alternative3, resaleValueCriterion].LocalPriority = 0.055M;
-            hierarchy[alternative4, resaleValueCriterion].LocalPriority = 0.415M;
-            hierarchy[alternative5, resaleValueCriterion].LocalPriority = 0.105M;
-            hierarchy[alternative6, resaleValueCriterion].LocalPriority = 0.105M;
+            resaleValueCriterion.AlternativeNodes[alternative1].LocalPriority = 0.225M;
+            resaleValueCriterion.AlternativeNodes[alternative2].LocalPriority = 0.095M;
+            resaleValueCriterion.AlternativeNodes[alternative3].LocalPriority = 0.055M;
+            resaleValueCriterion.AlternativeNodes[alternative4].LocalPriority = 0.415M;
+            resaleValueCriterion.AlternativeNodes[alternative5].LocalPriority = 0.105M;
+            resaleValueCriterion.AlternativeNodes[alternative6].LocalPriority = 0.105M;
 
-            hierarchy[alternative1, safetyCriterion].LocalPriority = 0.215M;
-            hierarchy[alternative2, safetyCriterion].LocalPriority = 0.215M;
-            hierarchy[alternative3, safetyCriterion].LocalPriority = 0.083M;
-            hierarchy[alternative4, safetyCriterion].LocalPriority = 0.038M;
-            hierarchy[alternative5, safetyCriterion].LocalPriority = 0.025M;
-            hierarchy[alternative6, safetyCriterion].LocalPriority = 0.424M;
+            safetyCriterion.AlternativeNodes[alternative1].LocalPriority = 0.215M;
+            safetyCriterion.AlternativeNodes[alternative2].LocalPriority = 0.215M;
+            safetyCriterion.AlternativeNodes[alternative3].LocalPriority = 0.083M;
+            safetyCriterion.AlternativeNodes[alternative4].LocalPriority = 0.038M;
+            safetyCriterion.AlternativeNodes[alternative5].LocalPriority = 0.025M;
+            safetyCriterion.AlternativeNodes[alternative6].LocalPriority = 0.424M;
 
-            hierarchy[alternative1, styleCriterion].LocalPriority = 0.346M;
-            hierarchy[alternative2, styleCriterion].LocalPriority = 0.346M;
-            hierarchy[alternative3, styleCriterion].LocalPriority = 0.045M;
-            hierarchy[alternative4, styleCriterion].LocalPriority = 0.160M;
-            hierarchy[alternative5, styleCriterion].LocalPriority = 0.025M;
-            hierarchy[alternative6, styleCriterion].LocalPriority = 0.078M;
+            styleCriterion.AlternativeNodes[alternative1].LocalPriority = 0.346M;
+            styleCriterion.AlternativeNodes[alternative2].LocalPriority = 0.346M;
+            styleCriterion.AlternativeNodes[alternative3].LocalPriority = 0.045M;
+            styleCriterion.AlternativeNodes[alternative4].LocalPriority = 0.160M;
+            styleCriterion.AlternativeNodes[alternative5].LocalPriority = 0.025M;
+            styleCriterion.AlternativeNodes[alternative6].LocalPriority = 0.078M;
 
-            hierarchy[alternative1, cargoCapacityCriterion].LocalPriority = 0.090M;
-            hierarchy[alternative2, cargoCapacityCriterion].LocalPriority = 0.090M;
-            hierarchy[alternative3, cargoCapacityCriterion].LocalPriority = 0.170M;
-            hierarchy[alternative4, cargoCapacityCriterion].LocalPriority = 0.170M;
-            hierarchy[alternative5, cargoCapacityCriterion].LocalPriority = 0.170M;
-            hierarchy[alternative6, cargoCapacityCriterion].LocalPriority = 0.310M;
+            cargoCapacityCriterion.AlternativeNodes[alternative1].LocalPriority = 0.090M;
+            cargoCapacityCriterion.AlternativeNodes[alternative2].LocalPriority = 0.090M;
+            cargoCapacityCriterion.AlternativeNodes[alternative3].LocalPriority = 0.170M;
+            cargoCapacityCriterion.AlternativeNodes[alternative4].LocalPriority = 0.170M;
+            cargoCapacityCriterion.AlternativeNodes[alternative5].LocalPriority = 0.170M;
+            cargoCapacityCriterion.AlternativeNodes[alternative6].LocalPriority = 0.310M;
 
-            hierarchy[alternative1, passengerCapacityCriterion].LocalPriority = 0.136M;
-            hierarchy[alternative2, passengerCapacityCriterion].LocalPriority = 0.136M;
-            hierarchy[alternative3, passengerCapacityCriterion].LocalPriority = 0.273M;
-            hierarchy[alternative4, passengerCapacityCriterion].LocalPriority = 0.136M;
-            hierarchy[alternative5, passengerCapacityCriterion].LocalPriority = 0.046M;
-            hierarchy[alternative6, passengerCapacityCriterion].LocalPriority = 0.273M;
+            passengerCapacityCriterion.AlternativeNodes[alternative1].LocalPriority = 0.136M;
+            passengerCapacityCriterion.AlternativeNodes[alternative2].LocalPriority = 0.136M;
+            passengerCapacityCriterion.AlternativeNodes[alternative3].LocalPriority = 0.273M;
+            passengerCapacityCriterion.AlternativeNodes[alternative4].LocalPriority = 0.136M;
+            passengerCapacityCriterion.AlternativeNodes[alternative5].LocalPriority = 0.046M;
+            passengerCapacityCriterion.AlternativeNodes[alternative6].LocalPriority = 0.273M;
 
             #endregion
 

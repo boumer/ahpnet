@@ -26,14 +26,73 @@ namespace Ahp.Tests
         }
 
         [TestMethod]
-        public void Hierarchy_AlternativesAdd_AdsAlternatives()
+        public void Hierarchy_AddAlternative_Name_Success()
+        {
+            //Arrange
+            var hiearachy = new Hierarchy();
+
+            //Act
+            var alternative = hiearachy.AddAlternative("Alternative");
+
+            //Assert
+            Assert.AreEqual(1, hiearachy.Alternatives.Count());
+            Assert.AreEqual(alternative, hiearachy.Alternatives.ElementAt(0));
+            Assert.IsNotNull(alternative.ID);
+            Assert.AreEqual("Alternative", alternative.Name);
+        }
+
+        [TestMethod]
+        public void Hierarchy_AddAlternative_IdAndName_Success()
+        {
+            //Arrange
+            var hiearachy = new Hierarchy();
+
+            //Act
+            var alternative = hiearachy.AddAlternative("ID123", "Alternative");
+
+            //Assert
+            Assert.AreEqual(1, hiearachy.Alternatives.Count());
+            Assert.AreEqual(alternative, hiearachy.Alternatives.ElementAt(0));
+            Assert.AreEqual("ID123", alternative.ID);
+            Assert.AreEqual("Alternative", alternative.Name);
+        }
+
+        [TestMethod]
+        public void Hierarchy_AddAlternativeTwice_ThrowsException()
+        {
+            //Arrange
+            var hiearachy = new Hierarchy();
+            var alternative1 = new Alternative("Alternative1");
+            Exception exception = null;
+
+            //Act
+            hiearachy.AddAlternative(alternative1);
+            try
+            {
+                hiearachy.AddAlternative(alternative1);
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+
+            //Assert
+            Assert.AreEqual(1, hiearachy.Alternatives.Count());
+            Assert.AreEqual(alternative1, hiearachy.Alternatives.ElementAt(0));
+            Assert.IsNotNull(exception);
+            Assert.IsInstanceOfType(exception, typeof(ArgumentException));
+            Assert.AreEqual("Same alternative can not be added twice.", exception.Message);
+        }
+
+        [TestMethod]
+        public void Hierarchy_AddAlternative_Success()
         {
             //Arrange
             var hierarchy = new Hierarchy();
-            hierarchy.GoalNode.AddCriterionNode(new CriterionNode("Criterion1"));
-            hierarchy.GoalNode.CriterionNodes.ElementAt(0).AddSubcriterionNode(new CriterionNode("Criterion11"));
-            hierarchy.GoalNode.AddCriterionNode(new CriterionNode("Criterion2"));
-            hierarchy.GoalNode.AddCriterionNode(new CriterionNode("Criterion3"));
+            hierarchy.GoalNode.AddCriterionNode("Criterion1");
+            hierarchy.GoalNode.CriterionNodes[0].AddSubcriterionNode("Criterion11");
+            hierarchy.GoalNode.AddCriterionNode("Criterion2");
+            hierarchy.GoalNode.AddCriterionNode("Criterion3");
 
             var alternative1 = new Alternative("Alternative1");
             var alternative2 = new Alternative("Alternative2");
@@ -54,7 +113,22 @@ namespace Ahp.Tests
         }
 
         [TestMethod]
-        public void Hierarchy_AlternativesRemove_RemovesAlternatives()
+        public void Hierarchy_RemoveAlternative_Success()
+        {
+            //Arrange
+            var hiearachy = new Hierarchy();
+            var alternative = new Alternative("Alternative1");
+
+            //Act
+            hiearachy.AddAlternative(alternative);
+            hiearachy.RemoveAlternative(alternative);
+
+            //Assert
+            Assert.IsFalse(hiearachy.Alternatives.Contains(alternative));
+        }
+
+        [TestMethod]
+        public void Hierarchy_RemoveAlternative_Success2()
         {
             //Arrange
             var hierarchy = new Hierarchy();
@@ -78,80 +152,6 @@ namespace Ahp.Tests
             {
                 Assert.IsFalse(criterion.AlternativeNodes.Contains(alternative1));
             }
-        }
-
-        [TestMethod]
-        public void Hierarchy_Indexer_WrongAlternativeKey_ThrowsException()
-        {
-            //Arrange
-            var hierarchy = new Hierarchy();
-            var criterion = hierarchy.GoalNode.AddCriterionNode("Criterion");
-            Exception exception = null;
-
-            //Act
-            try
-            {
-                var alternativeNode = hierarchy[new Alternative("WrongKey"), criterion];
-            }
-            catch (Exception e)
-            {
-                exception = e;
-            }
-
-            //Assert
-            Assert.IsNotNull(exception);
-            Assert.IsInstanceOfType(exception, typeof(KeyNotFoundException));
-            Assert.AreEqual(exception.Message, "Alternative 'WrongKey' not found in the Altenatives collection of the hierarchy");
-        }
-
-        [TestMethod]
-        public void Hierarchy_Indexer_WrongCriterionKey_ThrowsException()
-        {
-            //Arrange
-            var hierarchy = new Hierarchy();
-            var alternative = hierarchy.AddAlternative("Alternative");
-            Exception exception = null;
-
-            //Act
-            try
-            {
-                var alternativeNode = hierarchy[alternative, new CriterionNode("WrongKey")];
-            }
-            catch (Exception e)
-            {
-                exception = e;
-            }
-
-            //Assert
-            Assert.IsNotNull(exception);
-            Assert.IsInstanceOfType(exception, typeof(KeyNotFoundException));
-            Assert.AreEqual(exception.Message, "Criterion node 'WrongKey' not found in the criterion nodes which are at lowest level of the hierarchy");
-        }
-
-        [TestMethod]
-        public void Hierarchy_Indexer_ValidAlternativeAndCriterion_ReturnsAlternativeNode()
-        {
-            //Arrange => Act
-            var hierarchy = new Hierarchy();
-            var alternative1 = hierarchy.AddAlternative("Alternative1");
-            var alternative2 = hierarchy.AddAlternative("Alternative2");
-
-            var criterion1 = hierarchy.GoalNode.AddCriterionNode("Criterion1");
-            var criterion2 = hierarchy.GoalNode.AddCriterionNode("Criterion2");
-            var criterion11 = hierarchy.GoalNode.CriterionNodes.ElementAt(0).AddSubcriterionNode("Criterion11");
-
-            //Assert
-            Assert.AreEqual(hierarchy[alternative1, criterion2].Alternative, alternative1);
-            Assert.AreEqual(hierarchy[alternative1, criterion2].CriterionNode, criterion2);
-
-            Assert.AreEqual(hierarchy[alternative1, criterion11].Alternative, alternative1);
-            Assert.AreEqual(hierarchy[alternative1, criterion11].CriterionNode, criterion11);
-
-            Assert.AreEqual(hierarchy[alternative2, criterion2].Alternative, alternative2);
-            Assert.AreEqual(hierarchy[alternative2, criterion2].CriterionNode, criterion2);
-
-            Assert.AreEqual(hierarchy[alternative2, criterion11].Alternative, alternative2);
-            Assert.AreEqual(hierarchy[alternative1, criterion11].CriterionNode, criterion11);
         }
 
         [TestMethod]

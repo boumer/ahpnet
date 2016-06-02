@@ -29,27 +29,6 @@ namespace Ahp
             get { return _alternatives; }
         }
 
-        public AlternativeNode this[Alternative alternative, CriterionNode criterion]
-        {
-            get
-            {
-                if (!_alternatives.Contains(alternative))
-                {
-                    throw new KeyNotFoundException(string.Format("Alternative '{0}' not found in the Altenatives collection of the hierarchy", alternative.Name));
-                }
-
-                var nodes = GetLowestCriterionNodes();
-                if (!nodes.Contains(criterion))
-                {
-                    throw new KeyNotFoundException(string.Format("Criterion node '{0}' not found in the criterion nodes which are at lowest level of the hierarchy", criterion.Name));
-                }
-
-                RefreshAlternativeNodes();
-
-                return criterion.AlternativeNodes.Single(x => x.Alternative == alternative);
-            }
-        }
-
         public Alternative AddAlternative(string name)
         {
             return AddAlternative(Guid.NewGuid().ToString(), name);

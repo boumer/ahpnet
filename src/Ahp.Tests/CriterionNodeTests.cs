@@ -15,7 +15,8 @@ namespace Ahp.Tests
         public void CriterionNode_GlobalPriority_ReturnsCorrectValue()
         {
             //Arrange => Act
-            var criterion1 = new CriterionNode("Criterion1", 0.153M);
+            var hierarchy = new Hierarchy();
+            var criterion1 = hierarchy.GoalNode.AddCriterionNode("Criterion1", 0.153M);
             var criterion11 = criterion1.AddSubcriterionNode("Criterion11", 0.345M);
             var criterion111 = criterion11.AddSubcriterionNode("Criterion111", 0.876M);
 
@@ -151,7 +152,8 @@ namespace Ahp.Tests
         public void CriterionNode_SubcriterionNodesRemove_RemovesWithWixUp()
         {
             //Arrange
-            var criterion = new CriterionNode();
+            var hierarchy = new Hierarchy();
+            var criterion = hierarchy.GoalNode.AddCriterionNode("Criterion");
             var subcriterion = new CriterionNode();
 
             //Act
@@ -176,7 +178,8 @@ namespace Ahp.Tests
         public void CriterionNode_SubcriterionNodesCount_WithNodes_Returns1()
         {
             //Arrange => Act
-            var criterion = new CriterionNode();
+            var hierarchy = new Hierarchy();
+            var criterion = hierarchy.GoalNode.AddCriterionNode("Criterion");
             criterion.AddSubcriterionNode("Subcriterion");
 
             //Assert

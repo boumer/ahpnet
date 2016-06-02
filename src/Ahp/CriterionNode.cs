@@ -91,12 +91,18 @@ namespace Ahp
 
         public void AddSubcriterionNode(CriterionNode node)
         {
+            if (Hierarchy == null)
+            {
+                throw new InvalidOperationException("Can not add subcriterion node when Hierarchy is null.");
+            }
+
             if (AlternativeNodes.Count > 0)
             {
                 ClearChildNodes();
             }
 
             AddChildNode(node);
+            node.RefreshAlternativeNodes();
         }
 
         public void RemoveSubcriterionNode(CriterionNode node)
@@ -106,43 +112,22 @@ namespace Ahp
 
         public void RefreshAlternativeNodes()
         {
-            foreach (var alternative in Hierarchy.Alternatives)
+            if (SubcriterionNodes.Count == 0)
             {
-                if (!AlternativeNodes.Contains(alternative))
+                foreach (var alternative in Hierarchy.Alternatives)
                 {
-                    AddAlternativeNode(new AlternativeNode(alternative));
+                    if (!AlternativeNodes.Contains(alternative))
+                    {
+                        AddChildNode(new AlternativeNode(alternative));
+                    }
                 }
-            }
 
-            foreach (var alternativeNode in AlternativeNodes.ToArray())
-            {
-                if (!Hierarchy.Alternatives.Contains(alternativeNode.Alternative))
+                foreach (var alternativeNode in AlternativeNodes.ToArray())
                 {
-                    RemoveChildNode(alternativeNode);
-                }
-            }
-        }
-
-        private void AddAlternativeNode(AlternativeNode node)
-        {
-            if (SubcriterionNodes.Count > 0)
-            {
-                ClearChildNodes();
-            }
-
-            AddChildNode(node);
-        }
-
-        protected override void HandleChildAdded(Node node)
-        {
-            base.HandleChildAdded(node);
-
-            if (Hierarchy != null)
-            {
-                var criterionNode = node as CriterionNode;
-                if (criterionNode != null)
-                {
-                    criterionNode.RefreshAlternativeNodes();
+                    if (!Hierarchy.Alternatives.Contains(alternativeNode.Alternative))
+                    {
+                        RemoveChildNode(alternativeNode);
+                    }
                 }
             }
         }

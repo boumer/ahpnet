@@ -56,7 +56,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="AlternativeCollectionTests.cs" />
     <Compile Include="AlternativeNodeTests.cs" />
     <Compile Include="PairwiseComparisonTests.cs" />
     <Compile Include="CriterionNodeTests.cs" />

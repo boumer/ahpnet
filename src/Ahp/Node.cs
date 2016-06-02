@@ -102,13 +102,21 @@ namespace Ahp
             }
 
             _childNodes.Add(node);
-            HandleChildAdded(node);
+
+            if (node.ParentNode != this)
+            {
+                node.ParentNode = this;
+            }
         }
 
         protected void RemoveChildNode(Node node)
         {
             _childNodes.Remove(node);
-            HandleChildRemoved(node);
+
+            if (node.ParentNode == this)
+            {
+                node.ParentNode = null;
+            }
         }
 
         protected void ClearChildNodes()
@@ -140,22 +148,6 @@ namespace Ahp
             foreach (var node in nodes)
             {
                 SearchChildNodesRecursive(condition, node.ChildNodes.OfType<T>(), result);
-            }
-        }
-
-        protected virtual void HandleChildAdded(Node node)
-        {
-            if (node.ParentNode != this)
-            {
-                node.ParentNode = this;
-            }
-        }
-
-        protected virtual void HandleChildRemoved(Node node)
-        {
-            if (node.ParentNode == this)
-            {
-                node.ParentNode = null;
             }
         }
     }
