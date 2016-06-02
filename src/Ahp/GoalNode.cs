@@ -1,18 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Ahp
 {
     public class GoalNode : Node
     {
-        public GoalNode()
-            : this(null)
+        public GoalNode(Hierarchy hierarchy)
+            : this(hierarchy, null)
         { }
 
-        public GoalNode(string name)
+        public GoalNode(Hierarchy hierarchy, string name)
             : base(name, 1M)
-        { }
+        {
+
+            if (hierarchy == null)
+            {
+                throw new ArgumentNullException("hierarchy");
+            }
+
+            if (hierarchy.GoalNode != null)
+            {
+                throw new ArgumentException("Uninitialized hierarchy with null GoalNode expected.");
+            }
+
+            Hierarchy = hierarchy;
+        }
+
+        public Hierarchy Hierarchy { get; private set; }
 
         public override decimal LocalPriority
         {
@@ -28,13 +44,7 @@ namespace Ahp
 
         public IEnumerable<CriterionNode> CriterionNodes
         {
-            get
-            {
-                foreach (var child in ChildNodes)
-                {
-                    yield return (CriterionNode)child;
-                }
-            }
+            get { return ChildNodes.Cast<CriterionNode>(); }
         }
 
         public CriterionNode AddCriterionNode(string name)

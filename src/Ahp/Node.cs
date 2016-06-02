@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Ahp
 {
@@ -83,6 +84,30 @@ namespace Ahp
         protected NodeCollection<Node> ChildNodes
         {
             get { return _childNodes; }
+        }
+
+        public ICollection<T> SearchNodes<T>(Func<T, bool> condition) where T : Node
+        {
+            var result = new List<T>();
+            SearchNodesRecursive(condition, ChildNodes.OfType<T>(), result);
+
+            return result;
+        }
+
+        private void SearchNodesRecursive<T>(Func<T, bool> condition, IEnumerable<T> nodes, ICollection<T> result) where T : Node
+        {
+            foreach (var node in nodes)
+            {
+                if (condition(node))
+                {
+                    result.Add(node);
+                }
+            }
+
+            foreach (var node in nodes)
+            {
+                SearchNodesRecursive(condition, node.ChildNodes.OfType<T>(), result);
+            }
         }
 
         private void HandleChildAdded(Node node)

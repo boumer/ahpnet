@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace Ahp
 {
@@ -17,6 +19,19 @@ namespace Ahp
         public CriterionNode(string name, decimal localPriority)
             : base(name, localPriority)
         { }
+
+        public Hierarchy Hierarchy
+        {
+            get
+            {
+                if (ParentNode == null)
+                {
+                    return null;
+                }
+
+                return (GoalNode != null) ? GoalNode.Hierarchy : ParentCriterionNode.Hierarchy;
+            }
+        }
 
         public GoalNode GoalNode
         {
@@ -48,32 +63,12 @@ namespace Ahp
 
         public IEnumerable<CriterionNode> SubcriterionNodes
         {
-            get
-            {
-                foreach (var node in ChildNodes)
-                {
-                    var subcriterionNode = node as CriterionNode;
-                    if (subcriterionNode != null)
-                    {
-                        yield return subcriterionNode;
-                    }
-                }
-            }
+            get { return ChildNodes.OfType<CriterionNode>(); }
         }
 
         public IEnumerable<AlternativeNode> AlternativeNodes
         {
-            get
-            {
-                foreach (var node in ChildNodes)
-                {
-                    var alternativeNode = node as AlternativeNode;
-                    if (alternativeNode != null)
-                    {
-                        yield return alternativeNode;
-                    }
-                }
-            }
+            get { return ChildNodes.OfType<AlternativeNode>(); }
         }
 
         public bool HasSubcriterionNodes

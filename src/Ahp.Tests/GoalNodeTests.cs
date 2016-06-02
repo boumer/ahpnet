@@ -15,33 +15,33 @@ namespace Ahp.Tests
         public void GoalNode_Constructor_SetsName()
         {
             //Arrange => Act
-            var goal = new GoalNode("My Goal");
+            var hierarchy = new Hierarchy("My Goal");
 
             //Assert
-            Assert.AreEqual("My Goal", goal.Name);
+            Assert.AreEqual("My Goal", hierarchy.GoalNode.Name);
         }
-        
+
         [TestMethod]
         public void GoalNode_LocalPriority_AfterInit_Returns1M()
         {
             //Arrange => Act
-            var goal = new GoalNode();
+            var hierarchy = new Hierarchy();
 
             //Assert
-            Assert.AreEqual(1M, goal.LocalPriority);
+            Assert.AreEqual(1M, hierarchy.GoalNode.LocalPriority);
         }
 
         [TestMethod]
         public void GoalNode_LocalPrioritySetter_ThrowsException()
         {
             //Arrange
-            var goal = new GoalNode();
+            var hierarchy = new Hierarchy();
             Exception exception = null;
 
             //Act
             try
             {
-                goal.LocalPriority = 2M;
+                hierarchy.GoalNode.LocalPriority = 2M;
             }
             catch (Exception e)
             {
@@ -58,36 +58,36 @@ namespace Ahp.Tests
         public void GoalNode_GlobalPriority_AfterInit_Returns1M()
         {
             //Arrange => Act
-            var goal = new GoalNode();
+            var hierarchy = new Hierarchy();
 
             //Assert
-            Assert.AreEqual(1M, goal.GlobalPriority);
+            Assert.AreEqual(1M, hierarchy.GoalNode.GlobalPriority);
         }
 
         [TestMethod]
         public void GoalNode_AddCriterionNode_AdsWithFixUp()
         {
             //Arrange
-            var goal = new GoalNode();
+            var hierarchy = new Hierarchy();
             var criterion = new CriterionNode();
 
             //Act
-            goal.AddCriterionNode(criterion);
+            hierarchy.GoalNode.AddCriterionNode(criterion);
 
             //Assert
-            Assert.AreEqual(goal, criterion.GoalNode);
+            Assert.AreEqual(hierarchy.GoalNode, criterion.GoalNode);
         }
 
         [TestMethod]
         public void GoalNode_RemoveCriterionNode_RemovesWithFixUp()
         {
             //Arrange
-            var goal = new GoalNode();
+            var hierarchy = new Hierarchy();
             var criterion = new CriterionNode();
 
             //Act
-            goal.AddCriterionNode(criterion);
-            goal.RemoveCriterionNode(criterion);
+            hierarchy.GoalNode.AddCriterionNode(criterion);
+            hierarchy.GoalNode.RemoveCriterionNode(criterion);
 
             //Assert
             Assert.IsNull(criterion.GoalNode);

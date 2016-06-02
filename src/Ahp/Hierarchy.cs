@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Ahp
 {
@@ -12,7 +13,7 @@ namespace Ahp
 
         public Hierarchy(string goalName)
         {
-            _goalNode = new GoalNode(goalName);
+            _goalNode = new GoalNode(this, goalName);
             _alternatives = new List<Alternative>();
         }
 
@@ -34,31 +35,18 @@ namespace Ahp
             {
                 if (!_alternatives.Contains(alternative))
                 {
-                    throw new KeyNotFoundException(String.Format("Alternative '{0}' not found in the Altenatives collection of the hierarchy", alternative.Name));
+                    throw new KeyNotFoundException(string.Format("Alternative '{0}' not found in the Altenatives collection of the hierarchy", alternative.Name));
                 }
 
                 var nodes = GetLowestCriterionNodes();
                 if (!nodes.Contains(criterion))
                 {
-                    throw new KeyNotFoundException(String.Format("Criterion node '{0}' not found in the criterion nodes which are at lowest level of the hierarchy", criterion.Name));
+                    throw new KeyNotFoundException(string.Format("Criterion node '{0}' not found in the criterion nodes which are at lowest level of the hierarchy", criterion.Name));
                 }
 
                 RefreshAlternativeNodes();
 
-                AlternativeNode result = null;
-                foreach (var node in nodes)
-                {
-                    foreach (var alternativeNode in node.AlternativeNodes)
-                    {
-                        if (object.ReferenceEquals(node, criterion) &&
-                            object.ReferenceEquals(alternativeNode.Alternative, alternative))
-                        {
-                            result = alternativeNode;
-                        }
-                    }
-                }
-
-                return result;
+                return criterion.AlternativeNodes.Single(x => x.Alternative == alternative);
             }
         }
 
@@ -101,33 +89,6 @@ namespace Ahp
             }
         }
 
-        public ICollection<CriterionNode> GetLowestCriterionNodes()
-        {
-            var nodes = new List<CriterionNode>();
-
-            foreach (var criterionNode in GoalNode.CriterionNodes)
-            {
-                LookForLowestCriterionNodes(criterionNode, nodes);
-            }
-
-            return nodes;
-        }
-
-        private void LookForLowestCriterionNodes(CriterionNode node, ICollection<CriterionNode> nodes)
-        {
-            if (node.HasSubcriterionNodes)
-            {
-                foreach (var subcriterionNode in node.SubcriterionNodes)
-                {
-                    LookForLowestCriterionNodes(subcriterionNode, nodes);
-                }
-            }
-            else
-            {
-                nodes.Add(node);
-            }
-        }
-
         public void RefreshAlternativeNodes()
         {
             foreach (var criterionNode in GetLowestCriterionNodes())
@@ -140,20 +101,20 @@ namespace Ahp
                     }
                 }
 
-                var toBeRemoved = new List<AlternativeNode>();
-                foreach (var alternativeNode in criterionNode.AlternativeNodes)
+                var alternativeNodes = new List<AlternativeNode>(criterionNode.AlternativeNodes);
+                foreach (var alternativeNode in alternativeNodes)
                 {
                     if (!_alternatives.Contains(alternativeNode.Alternative))
                     {
-                        toBeRemoved.Add(alternativeNode);
+                        criterionNode.RemoveAlternativeNode(alternativeNode);
                     }
                 }
-
-                foreach (var alternativeNode in toBeRemoved)
-                {
-                    criterionNode.RemoveAlternativeNode(alternativeNode);
-                }
             }
+        }
+
+        public ICollection<CriterionNode> GetLowestCriterionNodes()
+        {
+            return GoalNode.SearchNodes<CriterionNode>((node) => !node.HasSubcriterionNodes);
         }
     }
 }

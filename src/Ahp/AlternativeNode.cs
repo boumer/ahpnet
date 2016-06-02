@@ -21,6 +21,11 @@ namespace Ahp
             _alternative = alternative;
         }
 
+        public Hierarchy Hierarchy
+        {
+            get { return (CriterionNode != null) ? CriterionNode.Hierarchy : null; }
+        }
+
         public override string Name
         {
             get { return _alternative.Name; }

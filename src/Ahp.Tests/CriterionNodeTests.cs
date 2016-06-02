@@ -29,16 +29,16 @@ namespace Ahp.Tests
         public void CriterionNode_GoalNode_SetsGoalAndSetsParentCriterionNodeToNull()
         {
             //Arrange
-            var goal = new GoalNode();
+            var hierarchy = new Hierarchy();
             var criterion = new CriterionNode();
             criterion.ParentCriterionNode = new CriterionNode();
 
             //Act
-            criterion.GoalNode = goal;
+            criterion.GoalNode = hierarchy.GoalNode;
 
             //Assert
-            Assert.AreEqual(goal, criterion.GoalNode);
-            Assert.IsTrue(goal.CriterionNodes.Contains(criterion));
+            Assert.AreEqual(hierarchy.GoalNode, criterion.GoalNode);
+            Assert.IsTrue(hierarchy.GoalNode.CriterionNodes.Contains(criterion));
             Assert.IsNull(criterion.ParentCriterionNode);
         }
 
@@ -46,43 +46,44 @@ namespace Ahp.Tests
         public void CriterionNode_GoalNode_ChangesGoal()
         {
             //Arrange
-            var goal = new GoalNode();
-            var goalNew = new GoalNode();
+            var hierarchy = new Hierarchy();
+            var hierarchyNew = new Hierarchy();
             var criterion = new CriterionNode();
 
             //Act
-            criterion.GoalNode = goal;
-            criterion.GoalNode = goalNew;
+            criterion.GoalNode = hierarchy.GoalNode;
+            criterion.GoalNode = hierarchyNew.GoalNode;
 
             //Assert
-            Assert.IsFalse(goal.CriterionNodes.Contains(criterion));
-            Assert.AreEqual(goalNew, criterion.GoalNode);
-            Assert.IsTrue(goalNew.CriterionNodes.Contains(criterion));
+            Assert.IsFalse(hierarchy.GoalNode.CriterionNodes.Contains(criterion));
+            Assert.AreEqual(hierarchyNew.GoalNode, criterion.GoalNode);
+            Assert.IsTrue(hierarchyNew.GoalNode.CriterionNodes.Contains(criterion));
         }
 
         [TestMethod]
         public void CriterionNode_GoalNode_SetsGoalToNull()
         {
             //Arrange
-            var goal = new GoalNode();
+            var hierarchy = new Hierarchy();
             var criterion = new CriterionNode();
 
             //Act
-            criterion.GoalNode = goal;
+            criterion.GoalNode = hierarchy.GoalNode;
             criterion.GoalNode = null;
 
             //Assert
             Assert.IsNull(criterion.GoalNode);
-            Assert.IsFalse(goal.CriterionNodes.Contains(criterion));
+            Assert.IsFalse(hierarchy.GoalNode.CriterionNodes.Contains(criterion));
         }
 
         [TestMethod]
         public void CriterionNode_ParentCriterionNode_SetsParentAndSetsGoalNodeToNull()
         {
             //Arrange
+            var hierarchy = new Hierarchy();
             var criterion = new CriterionNode();
             var parent = new CriterionNode();
-            criterion.GoalNode = new GoalNode();
+            criterion.GoalNode = hierarchy.GoalNode;
 
             //Act
             criterion.ParentCriterionNode = parent;
@@ -150,7 +151,7 @@ namespace Ahp.Tests
             //Arrange
             var criterion = new CriterionNode();
             var subcriterion = new CriterionNode();
-            
+
             //Act
             criterion.AddSubcriterionNode(subcriterion);
             criterion.RemoveSubcriterionNode(subcriterion);
@@ -189,14 +190,14 @@ namespace Ahp.Tests
 
             //Assert
             Assert.IsNull(alternativeNode.CriterionNode);
-        }       
+        }
 
         [TestMethod]
         public void CriterionNode_HasSubcriterionNodes_WithoutNodes_ReturnsFalse()
         {
             //Arrange => Act
             var criterion = new CriterionNode();
-            
+
             //Assert
             Assert.IsFalse(criterion.HasSubcriterionNodes);
         }
