@@ -16,11 +16,7 @@ namespace AhpDemo
     {
         public App()
         {
-            var mainWindow = new MainWindow();
-
-            MainWindow = mainWindow;
-            MainWindow.DataContext = new MainViewModel();
-
+            MainWindow = new MainView(new MainViewModel());
             MainWindow.Show();
         }
     }

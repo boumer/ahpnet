@@ -1,18 +1,33 @@
 ﻿using Ahp;
+using AhpDemo.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace AhpDemo.ViewModels
 {
     public class GoalNodeViewModel : HierarchyNodeViewModel
     {
-        public GoalNodeViewModel(HierarchyViewModel hierarchy)
+        public GoalNode Goal { get; private set; }
+
+        public GoalNodeViewModel(HierarchyViewModel hierarchy, GoalNode goal)
             : base(hierarchy)
         {
-            Name = "Goal";
+            Goal = goal;
+        }
+
+        public override string Name
+        {
+            get { return Goal.Name; }
+            set
+            {
+                Goal.Name = value;
+                OnPropertyChanged(() => Name);
+            }
         }
 
         public IEnumerable<CriterionNodeViewModel> GetAllCriterionNodes()
@@ -34,6 +49,11 @@ namespace AhpDemo.ViewModels
             {
                 GetAllChildrenRecursive(node.Children.Cast<CriterionNodeViewModel>(), result);
             }
+        }
+
+        protected override UIElement CreateActionControl()
+        {
+            return new GoalView(this);
         }
     }
 }

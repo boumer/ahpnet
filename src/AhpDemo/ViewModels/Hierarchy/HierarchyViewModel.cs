@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -34,7 +35,18 @@ namespace AhpDemo.ViewModels
         public HierarchyNodeViewModel SelectedNode
         {
             get { return _selectedNode; }
-            set { SetProperty(ref _selectedNode, value); }
+            set
+            {
+                if (SetProperty(ref _selectedNode, value))
+                {
+                    OnPropertyChanged(() => SelectedNodeActionControl);
+                }
+            }
+        }
+
+        public UIElement SelectedNodeActionControl
+        {
+            get { return _selectedNode != null ? _selectedNode.ActionControl : null; }
         }
 
         private readonly ObservableCollection<HierarchyNodeViewModel> _nodes = new ObservableCollection<HierarchyNodeViewModel>();
@@ -45,7 +57,7 @@ namespace AhpDemo.ViewModels
 
         private void InitializeNodes()
         {
-            GoalNode = new GoalNodeViewModel(this);
+            GoalNode = new GoalNodeViewModel(this, Manager.Hierarchy.GoalNode);
             Nodes.Add(GoalNode);
 
             AlternativesNode = new AlternativesNodeViewModel(this);

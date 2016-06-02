@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace AhpDemo.ViewModels
@@ -18,7 +19,7 @@ namespace AhpDemo.ViewModels
         }
 
         private string _name;
-        public string Name
+        public virtual string Name
         {
             get { return _name; }
             set { SetProperty(ref _name, value); }
@@ -76,6 +77,20 @@ namespace AhpDemo.ViewModels
                 {
                     Parent.IsExpanded = true;
                 }
+            }
+        }
+
+        private UIElement _actionControl;
+        public UIElement ActionControl
+        {
+            get
+            {
+                if (_actionControl == null)
+                {
+                    _actionControl = CreateActionControl();
+                }
+
+                return _actionControl;
             }
         }
 
@@ -160,6 +175,8 @@ namespace AhpDemo.ViewModels
                 SortChildren();
             }
         }
+
+        protected abstract UIElement CreateActionControl();
 
         private void SortChildren()
         {
